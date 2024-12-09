@@ -1,4 +1,4 @@
-package org.example.modele;
+package org.example.modele.themes;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,11 +7,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
-public class CarteParFichier extends Carte{
-    @Override
+public class GenerateurParFichier {
+    protected Map<Integer, List<String>> matrice;
+    protected String fichier;
+    public GenerateurParFichier(String fichier) {
+        this.matrice = new TreeMap<>();
+        this.fichier=fichier;
+    }
+
     public Map<Integer, List<String>> genererMatriceCaracteres() {
-        File file=new File("carte.txt");
+        File file=new File(fichier);
         FileReader fileReader= null;
         try {
             fileReader = new FileReader(file);
@@ -28,10 +35,13 @@ public class CarteParFichier extends Carte{
                 j++;
             }
 
+            System.out.println(matrice);
             return matrice;
 
         } catch (IOException e){
             throw new RuntimeException(e);
         }
     }
+
+
 }

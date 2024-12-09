@@ -1,6 +1,5 @@
-package org.example.modele;
+package org.example.modele.themes;
 
-import java.io.*;
 import java.util.*;
 
 public abstract class Theme {
@@ -24,4 +23,10 @@ public abstract class Theme {
     public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
+    protected ZoneDeJeu zoneDeJeu;
+    public Theme(ZoneDeJeu zoneDeJeu) {
+        this.zoneDeJeu = zoneDeJeu;
+    }
+
+    public abstract List<String> appliquerAffichage();
 }

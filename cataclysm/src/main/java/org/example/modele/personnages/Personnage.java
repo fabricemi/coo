@@ -2,6 +2,9 @@ package org.example.modele.personnages;
 
 
 import org.example.modele.*;
+import org.example.modele.aliments.Aliment;
+import org.example.modele.animaux.Ecureil;
+import org.example.modele.animaux.Singe;
 
 import java.util.*;
 
@@ -58,7 +61,9 @@ public class Personnage extends ComposantJeu implements Sujet {
             default:
                 throw new RuntimeException("sens inconnu");
         }
-        return stratDepPersonnage.seDeplacer(matrice,this);
+        boolean bool=stratDepPersonnage.seDeplacer(matrice,this);
+        stratDepPersonnage=null;
+        return bool;
     }
 
 
@@ -104,7 +109,6 @@ public class Personnage extends ComposantJeu implements Sujet {
                     this.objetRamasser.add(cps);
                     matrice.get(col).remove(row);
                     matrice.get(col).add(row,new ZoneVide());
-
                     return true;
                 }
             }
@@ -115,7 +119,7 @@ public class Personnage extends ComposantJeu implements Sujet {
         }
     }
 
-    private Integer[] caseAmodifier(String sens){
+    public Integer[] caseAmodifier(String sens){
         int x=this.getPosition().getX();
         int y=this.getPosition().getY();
         int col;
@@ -142,26 +146,7 @@ public class Personnage extends ComposantJeu implements Sujet {
         return new Integer[]{col, row};
     }
 
-    public boolean lancerNourriture(Map<Integer, List<ComposantJeu>> matrice, String sens){
-        try{
-            Map<String, ComposantJeu> eltsAutours = this.elementAutours(matrice);
-            List<Aliment> aliments=List.of(new Champignon(),new Gland(),new Champignon(), new Gland());
-            if(eltsAutours.containsKey(sens)){
-                ComposantJeu cps=eltsAutours.get(sens);
-                if(cps instanceof ZoneVide){
-                    int col=this.caseAmodifier(sens)[0];
-                    int row=this.caseAmodifier(sens)[1];
-                    matrice.get(col).remove(row);
-                    matrice.get(col).add(row,aliments.get(new Random().nextInt(aliments.size())));
-                    return true;
-                }
-            }
-            return false;
-        }
-        catch (IndexOutOfBoundsException | NullPointerException i){
-            return false;
-        }
-    }
+
     public boolean apprivoiser(Map<Integer, List<ComposantJeu>> matrice, String sens) {
         try{
             Map<String, ComposantJeu> eltsAutours = this.elementAutours(matrice);
@@ -183,14 +168,11 @@ public class Personnage extends ComposantJeu implements Sujet {
 
     public void donnerCoup(){
         if(!this.amis.isEmpty()){
-            System.out.println(this.getAmis().get(0));
-            System.out.println(this.getAmis().get(1));
-            Animaux animaux=(Animaux) this.amis.get(new Random().nextInt(this.amis.size()));
-            System.out.println(animaux);
-            detacher((Observateur) animaux);
-            System.out.println(this.amis.contains(animaux));
+            Observateur animaux= this.amis.get(new Random().nextInt(this.amis.size()));
+            detacher(animaux);
         }
     }
+
     public List<Observateur> getAmis() {
         return amis;
     }

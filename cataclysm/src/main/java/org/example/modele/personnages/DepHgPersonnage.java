@@ -26,5 +26,7 @@ public class DepHgPersonnage implements StratDepPersonnage {
         } catch (NullPointerException | IndexOutOfBoundsException e) {
             return false;
         }
+        finally {
+        }
     }
 }

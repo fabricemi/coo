@@ -8,14 +8,13 @@ import java.util.Map;
 
 public class DepVbPersonnage implements StratDepPersonnage {
 
-
     @Override
     public boolean seDeplacer(Map<Integer, List<ComposantJeu>> matrice, Personnage pers) {
         try {
             int x = pers.getPosition().getX();
             int y = pers.getPosition().getY();
 
-            if (matrice.get(+1).get(y) instanceof ZoneVide) {
+            if (matrice.get(x+1).get(y) instanceof ZoneVide) {
                 matrice.get(x).remove(y);
                 matrice.get(x).add(y, new ZoneVide());
                 matrice.get(x + 1).remove(y); //s'assurez que y+1<=list.size()-1
