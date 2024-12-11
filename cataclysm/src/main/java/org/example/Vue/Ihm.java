@@ -24,7 +24,7 @@ public class Ihm {
 
         actionsPersonnage.add("D");
         actionsPersonnage.add("LN");
-        actionsPersonnage.add("AA");
+        //actionsPersonnage.add("AA");
         actionsPersonnage.add("RO");
         actionsPersonnage.add("DC");
         actionsPersonnage.add("Q");
@@ -48,6 +48,10 @@ public class Ihm {
         generation.put("J", typegen2);
     }
 
+    /**
+     * recupere la direction dans laquelle le joeur veut recuperer l'action
+     * @return String la direction
+     */
     public String saisirDirection(){
         System.out.println("Saisir direction : haut(H/h) bas(B/b) gauche(G/g) droite(D/d) ");
         String string=scanner.nextLine();
@@ -62,10 +66,15 @@ public class Ihm {
     public void close(){
         scanner.close();
     }
+
+    /**
+     * recuperer le nom de l'action que le joeur veut faire
+     * @return String le nom de l'action
+     */
     public String queVoulezFaire(){
         System.out.println("Que voullez vous faire?");
         String msg="seDeplacer(D/d)|LancerNourriture(LN/ln)|" +
-                "Apprivoiser(AA/aa)|ramasserObjet(RO/ro)|donnerCoup(DC/dc)|quittez le jeu(Q/q)";
+                "ramasserObjet(RO/ro)|donnerCoup(DC/dc)|quittez le jeu(Q/q)";
         System.out.println(msg);
         String string=scanner.nextLine();
         while (!actionsPersonnage.contains(string.toUpperCase())){
@@ -76,6 +85,11 @@ public class Ihm {
         return string.toUpperCase();
 
     }
+
+    /**
+     * recuperer le thème ainsi le mode de generation de la zone de jeu que veut le joueur
+     * @return String[] contenant le nom du theme et de mode generation
+     */
     public String[] themeModeleGeneration(){
         System.out.println("Veuillez choisir le thème Forêt(saisir F/f) ou Jungle(saisir J/j");
         String string=scanner.nextLine();
@@ -111,6 +125,10 @@ public class Ihm {
         return string3;
     }
 
+    /**
+     * affiche la zone de jeu
+     * @param list la liste des lignes
+     */
     public void afficher(List<String> list){
         list.forEach(
                 (i)-> {

@@ -164,7 +164,6 @@ public class Ecureil extends Animaux implements Observateur {
         sens_assoc_champignon = null;
         sens_assoc_standard = null;
 
-
     }
 
     public boolean estAffameApres5tour() {

@@ -2,14 +2,11 @@ package org.example.controlleur;
 
 import org.example.Vue.Ihm;
 import org.example.modele.*;
-import org.example.modele.personnages.Personnage;
 import org.example.modele.themes.*;
 
 public class Controller {
-    private Theme theme;
+    private ThemeZoneCreateur createur;
     Jeu jeu;
-
-    ZoneDeJeu zoneDeJeu;
 
     private boolean jeu_encours=true;
     private Ihm ihm;
@@ -22,13 +19,11 @@ public class Controller {
         String[] datas=initialiserZone();
         String them=datas[0];
         String typegen=datas[1];
-        CtlInitZone(typegen);
-        CtlInitTheme(them);
-
-        jeu=new Jeu(zoneDeJeu);
+        CtlInitZone(them,typegen);
+        jeu=new Jeu(createur);
         jeu.chargerReservePersonnage(them);
+        ihm.afficher(jeu.appliquerAffichage());
 
-        ihm.afficher(theme.appliquerAffichage());
         ihm.line();
         while (jeu_encours){
             String act=ihm.queVoulezFaire();
@@ -39,7 +34,7 @@ public class Controller {
             setAction(act);
             jeu.deplacerAnimaux();
             jeu.mettreAjour();
-            ihm.afficher(theme.appliquerAffichage());
+            ihm.afficher(jeu.appliquerAffichage());
             ihm.line();
         }
     }
@@ -50,10 +45,6 @@ public class Controller {
             case "D":
                 dir= ihm.saisirDirection();
                 jeu.deplacerPersonnage(dir);
-                break;
-            case "AA":
-                dir= ihm.saisirDirection();
-                jeu.apprivoiserAnimal(dir);
                 break;
             case "LN":
                 dir=ihm.saisirDirection();
@@ -76,43 +67,31 @@ public class Controller {
         return ihm.themeModeleGeneration();
     }
 
-    public void CtlInitTheme(String them){
-        switch (them){
-            case "F":
-                setTheme(new ThemeForet(zoneDeJeu));
-                break;
-            case "J":
-                setTheme(new ThemeJungle(zoneDeJeu));
-                break;
-            default:
-                throw  new RuntimeException("thème inconnu");
-        }
-    }
 
-    public void CtlInitZone(String typegen){
-        switch (typegen){
-            case "FF":
-                setZoneDeJeu(new ZoneDeJeuForetParFichier());
+    public void CtlInitZone(String theme,String typegen){
+
+        String assoc=theme+typegen;
+        switch (assoc){
+            case "FFF":
+                setCreateur(new TForetZFichier());
                 break;
-            case "NF":
-                setZoneDeJeu(new ZoneDeJeuForetNouvelle(80,20));
+            case "FNF":
+                setCreateur(new TForetZAleatoire());
                 break;
-            case "NJ": ;
-                setZoneDeJeu(new ZoneDeJeuJungleNouvelle(80,20));
+            case "JNJ": ;
+                setCreateur(new TJungleZAleaoire());
                 break;
-            case "FJ":
-                setZoneDeJeu(new ZoneDeJeuJungleParFichier());
+            case "JFJ":
+                setCreateur(new TJungleZFichier());
                 break;
             default:
                 throw new RuntimeException("Mode de generation inconnu");
         }
     }
 
-    public void setZoneDeJeu(ZoneDeJeu zoneDeJeu) {
-        this.zoneDeJeu = zoneDeJeu;
-    }
 
-    public void setTheme(Theme theme) {
-        this.theme = theme;
+
+    public void setCreateur(ThemeZoneCreateur createur) {
+        this.createur = createur;
     }
 }

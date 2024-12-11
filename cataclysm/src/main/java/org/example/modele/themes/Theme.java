@@ -1,5 +1,7 @@
 package org.example.modele.themes;
 
+import org.example.modele.ComposantJeu;
+
 import java.util.*;
 
 public abstract class Theme {
@@ -23,10 +25,28 @@ public abstract class Theme {
     public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
-    protected ZoneDeJeu zoneDeJeu;
-    public Theme(ZoneDeJeu zoneDeJeu) {
+   protected ZoneDeJeu zoneDeJeu;
+
+
+
+    /**
+     * applique un affichage  fonction de la zone de jeu
+     * @return List<String>
+     */
+    public List<String> appliquerAffichage(){
+        Set<Map.Entry<Integer, List<ComposantJeu>>> composantJeuSet= zoneDeJeu.getMatriceObjet().entrySet();
+        Iterator<Map.Entry<Integer, List<ComposantJeu>>> iterator= composantJeuSet.iterator();
+        return specificAlaZone(iterator);
+    }
+
+    public void setZoneDeJeu(ZoneDeJeu zoneDeJeu) {
         this.zoneDeJeu = zoneDeJeu;
     }
 
-    public abstract List<String> appliquerAffichage();
+    /**
+     * donne une apprence particulière selon le theme
+     * @param iterator l'iterator
+     * @return List<String>
+     */
+    public abstract List<String> specificAlaZone(Iterator<Map.Entry<Integer, List<ComposantJeu>>> iterator);
 }

@@ -1,11 +1,13 @@
 package org.example.modele;
 
+import org.example.controlleur.ThemeZoneCreateur;
 import org.example.modele.aliments.Aliment;
 import org.example.modele.aliments.Banane;
 import org.example.modele.aliments.Champignon;
 import org.example.modele.aliments.Gland;
 import org.example.modele.animaux.Animaux;
 import org.example.modele.personnages.Personnage;
+import org.example.modele.themes.Theme;
 import org.example.modele.themes.ZoneDeJeu;
 
 import java.util.*;
@@ -13,10 +15,20 @@ import java.util.*;
 public class Jeu {
 
     private ZoneDeJeu zoneDeJeu;
+    private Theme theme;
+
     List<Aliment> aliments_reserves_personnage;
-    public Jeu(ZoneDeJeu zoneDeJeu) {
-        this.zoneDeJeu = zoneDeJeu;
+    public Jeu(ThemeZoneCreateur zoneCreateur) {
+        this.zoneDeJeu = zoneCreateur.createZoneDeJeu();
+        theme=zoneCreateur.createTheme();
+
+
         this.zoneDeJeu.generateCarte();
+        theme.setZoneDeJeu(zoneDeJeu);
+    }
+
+    public  List<String> appliquerAffichage(){
+        return theme.appliquerAffichage();
     }
 
     public void setAliments_reserves_personnage(List<Aliment> aliments_reserves_personnage) {
@@ -69,9 +81,9 @@ public class Jeu {
             return false;
         }
     }
-    public boolean apprivoiserAnimal(String sens){
+  /*  public boolean apprivoiserAnimal(String sens){
         return  Personnage.getInstance().apprivoiser(getMatriceCarte(), sens);
-    }
+    }*/
 
     public boolean ramasserObjet(String sens){
         return  Personnage.getInstance().ramasserObjet(getMatriceCarte(), sens);
@@ -105,6 +117,10 @@ public class Jeu {
                 }
         );
     }
+
+    /**
+     * applique la mise à jour des animaux en fonction de leur etat
+     */
     public void mettreAjour(){
         getAnimals().forEach(
                 (a)->{

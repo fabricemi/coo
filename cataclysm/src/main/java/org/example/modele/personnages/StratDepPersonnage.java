@@ -7,6 +7,13 @@ import java.util.Map;
 
 public interface StratDepPersonnage {
 
+
+    /**
+     * deplace le personnage
+     * @param matrice la matrice de la zone de jeu
+     * @param pers le personnage
+     * @return True si le deplacement s'est effectué
+     */
     public boolean seDeplacer(Map<Integer, List<ComposantJeu>> matrice, Personnage pers);
 
 }

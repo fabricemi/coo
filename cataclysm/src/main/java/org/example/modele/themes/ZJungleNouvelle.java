@@ -3,7 +3,7 @@ package org.example.modele.themes;
 import java.util.List;
 import java.util.Map;
 
-public class ZoneDeJeuJungleNouvelle extends ZoneDeJeuJungle {
+public class ZJungleNouvelle extends ZoneDeJeuJungle {
     private int length;
     private int larger;
 
@@ -18,7 +18,7 @@ public class ZoneDeJeuJungleNouvelle extends ZoneDeJeuJungle {
             "                                         " +
             "     R R        RRR    R   ";
 
-    public ZoneDeJeuJungleNouvelle(int length, int larger) {
+    public ZJungleNouvelle(int length, int larger) {
         this.length = length;
         this.larger = larger;
     }

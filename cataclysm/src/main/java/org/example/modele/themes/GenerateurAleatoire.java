@@ -14,6 +14,11 @@ public class GenerateurAleatoire {
         matrice=new TreeMap<>();
     }
 
+
+    /**
+     * genere la matrice de caracteres aléatoire via une chaine de caracteres
+     * @return Map<Integer, List<String>>
+     */
     public Map<Integer, List<String>> genererMatriceCaracteres() {
 
         for(int i=0; i<larger;i++){

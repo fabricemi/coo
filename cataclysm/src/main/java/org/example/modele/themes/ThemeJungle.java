@@ -8,20 +8,12 @@ import org.example.modele.personnages.Personnage;
 import java.util.*;
 
 public class ThemeJungle extends Theme{
-
-
-    public ThemeJungle(ZoneDeJeu zoneDeJeu) {
+   /* public ThemeJungle(ZoneDeJeu zoneDeJeu) {
         super(zoneDeJeu);
-    }
-
-
-    public List<String> appliquerAffichage(){
+    }*/
+    @Override
+    public List<String> specificAlaZone(Iterator<Map.Entry<Integer, List<ComposantJeu>>> iterator) {
         List<String> list=new ArrayList<>();
-
-        Set<Map.Entry<Integer, List<ComposantJeu>>> composantJeuSet= zoneDeJeu.getMatriceObjet().entrySet();
-
-        Iterator<Map.Entry<Integer, List<ComposantJeu>>> iterator= composantJeuSet.iterator();
-
         while (iterator.hasNext()){
             List<ComposantJeu> composantJeuList=iterator.next().getValue();
             String line="";
@@ -50,7 +42,6 @@ public class ThemeJungle extends Theme{
         }
 
         return list;
-
     }
 
 

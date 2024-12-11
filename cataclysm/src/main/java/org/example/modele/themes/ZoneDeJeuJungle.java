@@ -4,6 +4,7 @@ import org.example.modele.*;
 import org.example.modele.aliments.Banane;
 import org.example.modele.aliments.Champignon;
 import org.example.modele.animaux.Singe;
+import org.example.modele.animaux.SingeRassasie;
 import org.example.modele.personnages.Personnage;
 
 import java.util.ArrayList;
@@ -21,6 +22,10 @@ public abstract class ZoneDeJeuJungle extends ZoneDeJeu {
     }
 
 
+    /**
+     * genere la matrice de caractere de la zone jungle via un fichier ou une chaine de caractere
+     * @return Map<Integer, List<String>> contanant les caracteres
+     */
     public abstract Map<Integer, List<String>> genererMatriceCaracteres();
 
     public Map<Integer, List<ComposantJeu>> generateCarte(){
@@ -38,6 +43,7 @@ public abstract class ZoneDeJeuJungle extends ZoneDeJeu {
                     case "S":
                         Singe singe=new Singe();
                         singe.initPosition(i,j);
+                        //singe.setEtatSinge(SingeRassasie.getInstance(singe));
                         list.add(singe);
                         break;
                     case " ":

@@ -17,6 +17,10 @@ public class GenerateurParFichier {
         this.fichier=fichier;
     }
 
+    /**
+     * genere la matrice de caracteres aléatoire via un fichier texte
+     * @return Map<Integer, List<String>>
+     */
     public Map<Integer, List<String>> genererMatriceCaracteres() {
         File file=new File(fichier);
         FileReader fileReader= null;

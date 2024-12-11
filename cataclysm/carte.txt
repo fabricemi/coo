@@ -12,9 +12,6 @@ B                G       E  E           B BB BBBBBB BB                   E      
 A        BBB       E    E                       AAAAA                              B   BBB         A
 A                               @               BBBBBBB B B                        B       BBB     B
 B                    C                                                             BBBBB           A
-A                                                                                                  A
-         A                                                       C            B B        BBB       A
-A          A  A               B     B  B                   G C   C            B  BBB              A
                C               B  B     BB                    C G CC    C            A     B      B
 B   E   A C A                    BBBB   B                        CG   C                  AA B      A
 B        A   G                B    B  B             E            C  C                  BBB       A

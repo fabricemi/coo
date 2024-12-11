@@ -20,6 +20,10 @@ public class Personnage extends ComposantJeu implements Sujet {
     private List<ComposantJeu> objetRamasser = new ArrayList<>();
 
 
+    /**
+     * obtenir l'instance de la classe personnage
+     * @return Personnage, l'unique instance de la classe personnage dans le jeu
+     */
     public static Personnage getInstance() {
         if (instance == null) {
             instance = new Personnage();
@@ -35,6 +39,11 @@ public class Personnage extends ComposantJeu implements Sujet {
         this.position = PosPersonnage.getInstance(x, y);
     }
 
+    /**
+     * initialise la position du personnage lors de la génération d ela zone de jeu
+     * @param x l'abscisse
+     * @param y l'ordonné
+     */
     public void setPosition(int x, int y) {
         this.position.setX(x);
         this.position.setY(y);
@@ -44,6 +53,12 @@ public class Personnage extends ComposantJeu implements Sujet {
         return position;
     }
 
+    /**
+     * applique le deplacemnt du personnage
+     * @param matrice la carte du  jeu
+     * @param sens la direction
+     * @return True si le deplacement est faisable
+     */
     public boolean seDeplacer(Map<Integer, List<ComposantJeu>> matrice,String sens) {
         switch (sens) {
             case "D":
@@ -71,33 +86,46 @@ public class Personnage extends ComposantJeu implements Sujet {
         return objetRamasser;
     }
 
+
     public void seBattre() {
         //TODO
     }
 
+    /**
+     *permet au personnage de connaitre les elemnt squ'il y a autour de lui
+     * @param matrice la carte du jeu
+     * @return Map<String, ComposantJeu> contenant les elemnts autour du personnage associé à l a direction
+     * @throws IndexOutOfBoundsException si le l'abscisse x deborde
+     * @throws NullPointerException si l'ordonné y deborde
+     */
     public Map<String, ComposantJeu> elementAutours(Map<Integer, List<ComposantJeu>> matrice)
             throws IndexOutOfBoundsException, NullPointerException {
         int x = this.getPosition().getX();
         int y = this.getPosition().getY();
 
-        Map<String, ComposantJeu> eltsAutours = new HashMap<>();
-        if (y + 1 < matrice.get(x).size()) {
+       /*Map<String, ComposantJeu> eltsAutours = new HashMap<>();
+        if (sensValide(x,y+1,matrice)) {
             eltsAutours.put("D", matrice.get(x).get(y + 1));
         }
-        if ( y - 1 >= 0) {
+        if ( sensValide(x,y-1,matrice)) {
             eltsAutours.put("G", matrice.get(x).get(y - 1));
         }
-        if (matrice.containsKey(x - 1)) {
+        if (sensValide(x-1,y,matrice)) {
             eltsAutours.put("H", matrice.get(x - 1).get(y));
         }
-        if (matrice.containsKey(x + 1)) {
+        if (sensValide(x+1,y,matrice)) {
             eltsAutours.put("B", matrice.get(x + 1).get(y));
-        }
+        }*/
 
-        return eltsAutours;
+        return Utils.elementAutours(matrice, x,y);
     }
 
-
+    /**
+     * ajoute un objet à la liste d'objet ramasser
+     * @param matrice la carte du jeu
+     * @param sens le sens
+     * @return true si l'objet situé au sens indiqué peut etre ramassé par l'utilisateur
+     */
     public boolean ramasserObjet(Map<Integer, List<ComposantJeu>> matrice, String sens) {
         try{
             Map<String, ComposantJeu> eltsAutours = this.elementAutours(matrice);
@@ -119,6 +147,11 @@ public class Personnage extends ComposantJeu implements Sujet {
         }
     }
 
+    /**
+     * retourne les coordonnées de la case à modifier en fonction du sens
+     * @param sens le sens
+     * @return les coordonnées de la case à modifier
+     */
     public Integer[] caseAmodifier(String sens){
         int x=this.getPosition().getX();
         int y=this.getPosition().getY();
@@ -147,7 +180,7 @@ public class Personnage extends ComposantJeu implements Sujet {
     }
 
 
-    public boolean apprivoiser(Map<Integer, List<ComposantJeu>> matrice, String sens) {
+/*    public boolean apprivoiser(Map<Integer, List<ComposantJeu>> matrice, String sens) {
         try{
             Map<String, ComposantJeu> eltsAutours = this.elementAutours(matrice);
 
@@ -163,9 +196,12 @@ public class Personnage extends ComposantJeu implements Sujet {
         catch (IndexOutOfBoundsException | NullPointerException i){
             return false;
         }
-    }
+    }*/
 
 
+    /**
+     * supprime un animal choisi aléatoirement de la list ed'amis
+     */
     public void donnerCoup(){
         if(!this.amis.isEmpty()){
             Observateur animaux= this.amis.get(new Random().nextInt(this.amis.size()));
@@ -177,6 +213,11 @@ public class Personnage extends ComposantJeu implements Sujet {
         return amis;
     }
 
+
+    /**
+     * ajoute un animal à la liste d'amis
+     * @param o l'animal
+     */
     @Override
     public void attacher(Observateur o) {
         if(!this.amis.contains(o)){
@@ -184,6 +225,11 @@ public class Personnage extends ComposantJeu implements Sujet {
         }
     }
 
+
+    /**
+     * supprime un animal de la liste d'amis
+     * @param o l'animal
+     */
     @Override
     public void detacher(Observateur o) {
         this.amis.remove(o);

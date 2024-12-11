@@ -30,6 +30,8 @@ public class Singe extends Animaux implements Observateur {
     public List<String> sensAleatoire = new ArrayList<>();
     private int nbrTour;
 
+    private EtatSinge etatSinge;
+
     public Singe() {
         estAmi = false;
         estRassasie = true;
@@ -73,6 +75,7 @@ public class Singe extends Animaux implements Observateur {
 
     }
 
+
     public boolean estAffameApres3tour() {
         return nbrTour <= 0;
     }
@@ -84,19 +87,29 @@ public class Singe extends Animaux implements Observateur {
     public void setEtat() {
         this.mettreAjouter();
         if (estAmi) {
-            rep = Colors.PURPLE.getCode() + "S" + Colors.RESET.getCode();
+            etatSinge=new SingeEstAmi();
         } else if (estAffameApres3tour()) {
-            rep = Colors.BLACK.getCode() + "S" + Colors.RESET.getCode();
+            etatSinge=new SingeAffame();
         } else if (estRassasie) {
-            rep = Colors.BLUE.getCode() + "S" + Colors.RESET.getCode();
+            etatSinge=new SingeRassasie();
         }
-        System.out.println(rep + " est ami: " + estAmi
-                + " a fait 3 tours : " + estAffameApres3tour() + " est rassasié : " + estRassasie + " nbr tour associé: " + nbrTour);
+        rep=etatSinge.gererEtat();
+       // System.out.println(rep + " est ami: " + estAmi
+           //     + " a fait 3 tours : " + estAffameApres3tour() + " est rassasié : " + estRassasie + " nbr tour associé: " + nbrTour);
 
         if (estAffameApres3tour()) {
             resetNbrTour();
             estRassasie = false;
         }
+    }
+
+    public void setEstAmi(boolean estAmi) {
+        this.estAmi = estAmi;
+    }
+
+
+    public void setEstRassasie(boolean estRassasie) {
+        this.estRassasie = estRassasie;
     }
 
     @Override
@@ -115,13 +128,14 @@ public class Singe extends Animaux implements Observateur {
                 appliquerDeplacement(matrice, sens_assoc_banane);
                 aMangerApproximite(matrice);
                 estRassasie = true;
-                nbrTour = 3;
+                nbrTour = 4;
                 break;
             case "champignon":
                 appliquerDeplacement(matrice, sens_assoc_champignon);
                 aMangerApproximite(matrice);
                 estRassasie = true;
-                nbrTour =3;
+                nbrTour =4;
+
                 break;
             case "standard":
                 if(!sensAleatoire.isEmpty()){
@@ -133,12 +147,14 @@ public class Singe extends Animaux implements Observateur {
             default:
                 break;
         }
+        nbrTour--;
 
         if(nbr_consecutif_approx_pers==2){
             personnage.attacher(this);
             nbr_consecutif_approx_pers=0;
         }
-        nbrTour--;
+
+
         priority_standard = false;
         priority_champignon = false;
         priority_banane=false;

@@ -1,9 +1,6 @@
 package org.example.modele.animaux;
 
-import org.example.modele.ComposantJeu;
-import org.example.modele.Observateur;
-import org.example.modele.Position;
-import org.example.modele.ZoneVide;
+import org.example.modele.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +13,11 @@ public abstract class Animaux extends ComposantJeu{
         this.position = new Position(x,y);
     }
 
+    /**
+     * initialise la position de l'animal lors de la génération d ela zone de jeu
+     * @param x l'abscisse
+     * @param y l'ordonné
+     */
     public void setPosition(int x, int y){
         this.position.x=x;
         this.position.y=y;
@@ -25,8 +27,16 @@ public abstract class Animaux extends ComposantJeu{
         return position;
     }
 
+
+    /**
+     * donne à l'aminal la couleur qu'il faut en fonction de son état
+     */
     public abstract void setEtat();
 
+    /**
+     * deplace l'animal
+     * @param matrice la zone de jeu
+     */
     public abstract void seDeplacer(Map<Integer, List<ComposantJeu>> matrice);
 
     public Integer[] caseAmodifier(String sens) {
@@ -57,13 +67,20 @@ public abstract class Animaux extends ComposantJeu{
     }
 
 
+    /**
+     *connaitre les elemnt squ'il y a autour de l'animal
+     * @param matrice la carte du jeu
+     * @return Map<String, ComposantJeu> contenant les elemnts autour de l'animal associé à l a direction
+     * @throws IndexOutOfBoundsException si le l'abscisse x deborde
+     * @throws NullPointerException si l'ordonné y deborde
+     */
     public Map<String, ComposantJeu> elementAutours(Map<Integer, List<ComposantJeu>> matrice)
     {
         Map<String, ComposantJeu> eltsAutours = new TreeMap<>();
         int x = this.getPosition().getX();
         int y = this.getPosition().getY();
 
-        if (sensValide(x , y+1,matrice)) {
+     /*   if (sensValide(x , y+1,matrice)) {
             eltsAutours.put("D", matrice.get(x).get(y + 1));
         }
         if (sensValide(x , y-1,matrice)) {
@@ -74,10 +91,16 @@ public abstract class Animaux extends ComposantJeu{
         }
         if (sensValide(x + 1, y,matrice)) {
             eltsAutours.put("B", matrice.get(x + 1).get(y));
-        }
-        return eltsAutours;
+        }*/
+        return Utils.elementAutours(matrice,x,y);
     }
+
+    /**
+     * trouve la direction prioriataire pour un animal
+     * @param matrice la zone de jeu
+     */
     public abstract void directionPrioritaire(Map<Integer, List<ComposantJeu>> matrice);
+/*
     public boolean sensValide(int x, int y, Map<Integer, List<ComposantJeu>> matrice){
         try {
             matrice.get(x).get(y);
@@ -87,7 +110,14 @@ public abstract class Animaux extends ComposantJeu{
             return false;
         }
     }
+*/
 
+    /**
+     * appliquer le deplacement d'n animal une fois qu'il à detecter la directiion prioritaire
+     * @param matrice la zone jeu
+     * @param sens le sens
+     * @return True si le deplacement est réalisable
+     */
     protected boolean appliquerDeplacement(Map<Integer, List<ComposantJeu>> matrice, String sens ){
         try {
             int col =caseAmodifier(sens)[0];
@@ -107,5 +137,11 @@ public abstract class Animaux extends ComposantJeu{
         }
     }
 
+
+    /**
+     * savoir si l'animal à manger à côté du personnage
+     * @param matrice la zonz de jzu
+     * @return True si l'animal à manger à côté du personnage
+     */
     public abstract boolean aMangerApproximite(Map<Integer, List<ComposantJeu>> matrice);
 }

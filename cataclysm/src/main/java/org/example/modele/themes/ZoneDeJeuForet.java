@@ -18,6 +18,11 @@ public abstract class ZoneDeJeuForet extends ZoneDeJeu {
         this.matrice = new TreeMap<>();
         matriceObjet = new TreeMap<>();
     }
+
+    /**
+     * genere la matrice de caractere de la zone foret via un fichier ou une chaine de caractere
+     * @return Map<Integer, List<String>> contanant les caracteres
+     */
     public abstract Map<Integer, List<String>> genererMatriceCaracteres();
 
     @Override
