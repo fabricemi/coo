@@ -64,7 +64,7 @@ public abstract class ZoneDeJeuJungle extends ZoneDeJeu {
                         list.add(new PetitRochet());
                         break;
                     default:
-                        System.out.println(stringList.get(j)+" icciii");
+                        //System.out.println(stringList.get(j)+" icciii");
                         throw new RuntimeException("caracteres inconnue");
                 }
             }

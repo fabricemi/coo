@@ -1,6 +1,4 @@
-package org.example.controlleur;
-
-import org.example.modele.themes.*;
+package org.example.modele.themes;
 
 public class TJungleZFichier extends ThemeZoneCreateur{
     @Override

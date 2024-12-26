@@ -144,4 +144,7 @@ public abstract class Animaux extends ComposantJeu{
      * @return True si l'animal à manger à côté du personnage
      */
     public abstract boolean aMangerApproximite(Map<Integer, List<ComposantJeu>> matrice);
+
+    public abstract void manger(Map<Integer, List<ComposantJeu>> matrice, String sens);
+    public abstract void seDeplacerCaseVide(Map<Integer, List<ComposantJeu>> matrice);
 }

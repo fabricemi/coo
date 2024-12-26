@@ -1,9 +1,4 @@
-package org.example.controlleur;
-
-import org.example.modele.themes.Theme;
-import org.example.modele.themes.ThemeForet;
-import org.example.modele.themes.ZForetNouvelle;
-import org.example.modele.themes.ZoneDeJeu;
+package org.example.modele.themes;
 
 public class TForetZAleatoire extends ThemeZoneCreateur{
     @Override

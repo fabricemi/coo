@@ -1,6 +1,6 @@
 package org.example.modele;
 
-import org.example.controlleur.ThemeZoneCreateur;
+import org.example.modele.themes.ThemeZoneCreateur;
 import org.example.modele.aliments.Aliment;
 import org.example.modele.aliments.Banane;
 import org.example.modele.aliments.Champignon;
@@ -107,8 +107,8 @@ public class Jeu {
         return animaux;
     }
 
-    public void donnerCoup(){
-        Personnage.getInstance().donnerCoup();
+    public boolean donnerCoup(){
+        return Personnage.getInstance().donnerCoup();
     }
     public void deplacerAnimaux(){
      getAnimals().forEach(

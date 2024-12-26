@@ -1,4 +1,4 @@
-package org.example.controlleur;
+package org.example.modele.themes;
 
 import org.example.modele.themes.Theme;
 import org.example.modele.themes.ZoneDeJeu;

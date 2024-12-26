@@ -113,6 +113,22 @@ public class Singe extends Animaux implements Observateur {
     }
 
     @Override
+    public void manger(Map<Integer, List<ComposantJeu>> matrice, String sens){
+        appliquerDeplacement(matrice, sens);
+        aMangerApproximite(matrice);
+        estRassasie = true;
+        nbrTour = 4;
+    }
+
+    @Override
+    public void seDeplacerCaseVide(Map<Integer, List<ComposantJeu>> matrice){
+        if(!sensAleatoire.isEmpty()){
+            String seens = sensAleatoire.get(new Random().nextInt(sensAleatoire.size()));
+            appliquerDeplacement(matrice, seens);
+            this.sensAleatoire.clear();
+        }
+    }
+    @Override
     public void seDeplacer(Map<Integer, List<ComposantJeu>> matrice) {
         this.elementAutours(matrice);
         this.directionPrioritaire(matrice);
@@ -125,24 +141,13 @@ public class Singe extends Animaux implements Observateur {
 
         switch (priorite) {
             case "banane":
-                appliquerDeplacement(matrice, sens_assoc_banane);
-                aMangerApproximite(matrice);
-                estRassasie = true;
-                nbrTour = 4;
+                manger(matrice,sens_assoc_banane);
                 break;
             case "champignon":
-                appliquerDeplacement(matrice, sens_assoc_champignon);
-                aMangerApproximite(matrice);
-                estRassasie = true;
-                nbrTour =4;
-
+                manger(matrice,sens_assoc_champignon);
                 break;
             case "standard":
-                if(!sensAleatoire.isEmpty()){
-                    String seens = sensAleatoire.get(new Random().nextInt(sensAleatoire.size()));
-                    appliquerDeplacement(matrice, seens);
-                    this.sensAleatoire.clear();
-                }
+                seDeplacerCaseVide(matrice);
                 break;
             default:
                 break;

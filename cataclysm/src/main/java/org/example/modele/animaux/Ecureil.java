@@ -49,7 +49,6 @@ public class Ecureil extends Animaux implements Observateur {
     @Override
     public String toString() {
         return rep;
-
     }
 
     @Override
@@ -121,6 +120,24 @@ public class Ecureil extends Animaux implements Observateur {
     }
 
     @Override
+    public void manger(Map<Integer, List<ComposantJeu>> matrice, String sens){
+        appliquerDeplacement(matrice, sens);
+        estRassasie = true;
+        nbrTour = 5;
+        if (aMangerApproximite(matrice)) {
+            personnage.attacher(this);
+        }
+    }
+
+    @Override
+    public void seDeplacerCaseVide(Map<Integer, List<ComposantJeu>> matrice){
+        if (!sensAleatoire.isEmpty()) {
+            String seens = sensAleatoire.get(new Random().nextInt(sensAleatoire.size()));
+            appliquerDeplacement(matrice, seens);
+            this.sensAleatoire.clear();
+        }
+    }
+    @Override
     public void seDeplacer(Map<Integer, List<ComposantJeu>> matrice) {
         this.elementAutours(matrice);
         this.directionPrioritaire(matrice);
@@ -131,27 +148,13 @@ public class Ecureil extends Animaux implements Observateur {
 
         switch (priorite) {
             case "gland":
-                appliquerDeplacement(matrice, sens_assoc_gland);
-                estRassasie = true;
-                nbrTour = 5;
-                if (aMangerApproximite(matrice)) {
-                    personnage.attacher(this);
-                }
+                manger(matrice, sens_assoc_gland);
                 break;
             case "champignon":
-                appliquerDeplacement(matrice, sens_assoc_champignon);
-                estRassasie = true;
-                nbrTour = 5;
-                if (aMangerApproximite(matrice)) {
-                    personnage.attacher(this);
-                }
+                manger(matrice,sens_assoc_champignon);
                 break;
             case "standard":
-                if (!sensAleatoire.isEmpty()) {
-                    String seens = sensAleatoire.get(new Random().nextInt(sensAleatoire.size()));
-                    appliquerDeplacement(matrice, seens);
-                    this.sensAleatoire.clear();
-                }
+                seDeplacerCaseVide(matrice);
                 break;
             default:
                 break;

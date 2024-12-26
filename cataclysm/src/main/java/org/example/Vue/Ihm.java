@@ -14,6 +14,17 @@ public class Ihm {
 
     List<String> actionsPersonnage;
 
+    public void depImpossible(){
+        System.out.println("Vous ne pouvez pas effectuer ce deplacement");
+    }
+
+    public void plusAnimals(){
+        System.out.println("vous n'avez pas d'amis");
+    }
+
+    public void impossible(){
+        System.out.println("impossible");
+    }
     public Ihm() {
         directions=new ArrayList<>();
         themes=new ArrayList<>();

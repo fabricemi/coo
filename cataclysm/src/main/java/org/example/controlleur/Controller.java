@@ -44,18 +44,34 @@ public class Controller {
         switch (act){
             case "D":
                 dir= ihm.saisirDirection();
-                jeu.deplacerPersonnage(dir);
+                boolean res=jeu.deplacerPersonnage(dir);
+                while (!res){
+                    ihm.depImpossible();
+                    dir= ihm.saisirDirection();
+                    res=jeu.deplacerPersonnage(dir);
+                }
                 break;
             case "LN":
                 dir=ihm.saisirDirection();
-                jeu.lancerNourriture(dir);
+                boolean resln=jeu.lancerNourriture(dir);
+                while (!resln){
+                    ihm.impossible();
+                    dir=ihm.saisirDirection();
+                    resln=jeu.deplacerPersonnage(dir);
+                }
                 break;
             case "RO":
                 dir=ihm.saisirDirection();
-                jeu.ramasserObjet(dir);
+                boolean ress=jeu.ramasserObjet(dir);
+                if(!ress){
+                    ihm.impossible();
+                }
                 break;
             case "DC":
-                jeu.donnerCoup();
+                boolean resu=jeu.donnerCoup();
+                if(!resu){
+                    ihm.plusAnimals();
+                }
                 break;
             default:
                 throw new  RuntimeException("Défaillance controle donnée ihm : fonction queVoulezVousFaire");

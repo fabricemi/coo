@@ -1,9 +1,4 @@
-package org.example.controlleur;
-
-import org.example.modele.themes.Theme;
-import org.example.modele.themes.ThemeJungle;
-import org.example.modele.themes.ZJungleNouvelle;
-import org.example.modele.themes.ZoneDeJeu;
+package org.example.modele.themes;
 
 public class TJungleZAleaoire extends ThemeZoneCreateur{
     @Override

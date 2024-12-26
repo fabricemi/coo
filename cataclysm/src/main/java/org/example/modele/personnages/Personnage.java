@@ -147,6 +147,29 @@ public class Personnage extends ComposantJeu implements Sujet {
         }
     }
 
+    public boolean reposerObjet(Map<Integer, List<ComposantJeu>> matrice, String sens) {
+        try{
+            Map<String, ComposantJeu> eltsAutours = this.elementAutours(matrice);
+            if(eltsAutours.containsKey(sens) && !objetRamasser.isEmpty()){
+                ComposantJeu cps=eltsAutours.get(sens);
+                ComposantJeu oar= objetRamasser.get(new Random().nextInt(objetRamasser.size()));
+                if(cps instanceof ZoneVide){
+                    int col=this.caseAmodifier(sens)[0];
+                    int row=this.caseAmodifier(sens)[1];
+                    matrice.get(col).remove(row);
+                    matrice.get(col).add(row,oar);
+
+                    this.objetRamasser.remove(oar);
+                    return true;
+                }
+            }
+            return false;
+        }
+        catch (IndexOutOfBoundsException | NullPointerException i){
+            return false;
+        }
+    }
+
     /**
      * retourne les coordonnées de la case à modifier en fonction du sens
      * @param sens le sens
@@ -202,11 +225,14 @@ public class Personnage extends ComposantJeu implements Sujet {
     /**
      * supprime un animal choisi aléatoirement de la list ed'amis
      */
-    public void donnerCoup(){
+    public boolean donnerCoup(){
         if(!this.amis.isEmpty()){
             Observateur animaux= this.amis.get(new Random().nextInt(this.amis.size()));
             detacher(animaux);
+            return true;
         }
+
+        return false;
     }
 
     public List<Observateur> getAmis() {
