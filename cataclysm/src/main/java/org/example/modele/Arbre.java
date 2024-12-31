@@ -1,6 +1,6 @@
 package org.example.modele;
 
-public class Arbre extends ComposantJeu{
+public class Arbre extends Vegetaux{
 
     public Arbre() {
     }

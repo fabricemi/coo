@@ -14,9 +14,11 @@ import java.util.TreeMap;
 
 public abstract class ZoneDeJeuForet extends ZoneDeJeu {
     Map<Integer, List<String>> matrice;
+    ComposantCreator creator;
     public ZoneDeJeuForet() {
         this.matrice = new TreeMap<>();
         matriceObjet = new TreeMap<>();
+        creator=new ForetCreator();
     }
 
     /**
@@ -25,7 +27,7 @@ public abstract class ZoneDeJeuForet extends ZoneDeJeu {
      */
     public abstract Map<Integer, List<String>> genererMatriceCaracteres();
 
-    @Override
+    /*@Override
     public Map<Integer, List<ComposantJeu>> generateCarte(){
         Map<Integer, List<String>> matriceCaractere =genererMatriceCaracteres();
         for (int i = 0; i < matriceCaractere.size(); i++) {
@@ -67,8 +69,39 @@ public abstract class ZoneDeJeuForet extends ZoneDeJeu {
             matriceObjet.put(i,list);
         }
         return matriceObjet;
-    }
+    }*/
 
+    @Override
+    public Map<Integer, List<ComposantJeu>> generateCarte(){
+        Map<Integer, List<String>> matriceCaractere =genererMatriceCaracteres();
+        for (int i = 0; i < matriceCaractere.size(); i++) {
+            List<String> stringList = matriceCaractere.get(i);
+            List<ComposantJeu> list = new ArrayList<>();
+            for (int j=0;j<stringList.size();j++) {
+                switch (stringList.get(j)) {
+                    case "@":
+                        list.add(creator.createPersonage(i,j));
+                        break;
+                    case "E":
+                        list.add(creator.createAnimal(i,j));
+                        break;
+                    case " ":
+                        list.add(creator.createZoneVide(i,j));
+                        break;
+                    case "G", "C":
+                        list.add(creator.createAliment(stringList.get(j)));
+                        break;
+                    case "A","B":
+                        list.add(creator.createVegetaux(stringList.get(j)));
+                        break;
+                    default:
+                        throw new RuntimeException("caracteres inconnue");
+                }
+            }
+            matriceObjet.put(i,list);
+        }
+        return matriceObjet;
+    }
 
 
 }

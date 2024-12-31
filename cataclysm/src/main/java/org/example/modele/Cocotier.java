@@ -1,4 +1,4 @@
 package org.example.modele;
 
-public class Cocotier extends ComposantJeu {
+public class Cocotier extends Vegetaux {
 }

@@ -38,12 +38,18 @@ public class Ecureil extends Animaux implements Observateur {
     Personnage personnage;
     public boolean estAmi;
     private String rep;
+    EtatEcureil etatEcureil;
 
     public Ecureil() {
         estAmi = false;
         estRassasie = true;
         nbrTour = 5;
         rep = Colors.BLUE.getCode() + "E" + Colors.RESET.getCode();
+        etatEcureil=new EcureilRassasie();
+    }
+
+    public void setEtatEcureil(EtatEcureil etatEcureil) {
+        this.etatEcureil = etatEcureil;
     }
 
     @Override
@@ -53,6 +59,8 @@ public class Ecureil extends Animaux implements Observateur {
 
     @Override
     public void setEtat() {
+
+
         this.mettreAjouter();
         if (estAmi) {
             rep = Colors.PURPLE.getCode() + "E" + Colors.RESET.getCode();
@@ -99,6 +107,7 @@ public class Ecureil extends Animaux implements Observateur {
     }
 
 
+
     public void resetNbrTour() {
         nbrTour = 5;
     }
@@ -128,7 +137,9 @@ public class Ecureil extends Animaux implements Observateur {
             personnage.attacher(this);
         }
     }
-
+   public void  diminuerNbrTour(){
+        nbrTour--;
+   }
     @Override
     public void seDeplacerCaseVide(Map<Integer, List<ComposantJeu>> matrice){
         if (!sensAleatoire.isEmpty()) {
@@ -145,27 +156,36 @@ public class Ecureil extends Animaux implements Observateur {
         String priorite = (priority_gland && !estRassasie) ? "gland" :
                 (priority_champignon && !estRassasie) ? "champignon" :
                         priority_standard ? "standard" : "none";
+        if (estRassasie){
+            etatEcureil=new EcureilRassasie();
+        }
+        else {
+            etatEcureil=new EcureilAffame();
+        }
+        etatEcureil.deplacer(this,matrice);
 
-        switch (priorite) {
+/*        switch (priorite) {
             case "gland":
                 manger(matrice, sens_assoc_gland);
+
                 break;
             case "champignon":
                 manger(matrice,sens_assoc_champignon);
+                etatEcureil=new EcureilAffame();
                 break;
             case "standard":
                 seDeplacerCaseVide(matrice);
                 break;
             default:
                 break;
-        }
-        nbrTour--;
-        priority_standard = false;
-        priority_gland = false;
-        priority_champignon = false;
-        sens_assoc_gland = null;
-        sens_assoc_champignon = null;
-        sens_assoc_standard = null;
+        }*/
+        //nbrTour--;
+        //priority_standard = false;
+        //priority_gland = false;
+        //priority_champignon = false;
+        //sens_assoc_gland = null;
+        //sens_assoc_champignon = null;
+        //sens_assoc_standard = null;
 
     }
 
@@ -194,5 +214,11 @@ public class Ecureil extends Animaux implements Observateur {
         return Objects.hash(id);
     }
 
+    public void setEstRassasie(boolean estRassasie) {
+        this.estRassasie = estRassasie;
+    }
 
+    public void setNbrTour(int nbrTour) {
+        this.nbrTour = nbrTour;
+    }
 }
