@@ -31,13 +31,13 @@ public abstract class Animaux extends ComposantJeu{
     /**
      * donne à l'aminal la couleur qu'il faut en fonction de son état
      */
-    public abstract void setEtat();
+    public abstract void setApparence();
 
     /**
      * deplace l'animal
      * @param matrice la zone de jeu
      */
-    public abstract void seDeplacer(Map<Integer, List<ComposantJeu>> matrice);
+    public abstract Map<Integer, List<ComposantJeu>> seDeplacer(Map<Integer, List<ComposantJeu>> matrice);
 
     public Integer[] caseAmodifier(String sens) {
         int x = this.getPosition().getX();
@@ -95,11 +95,39 @@ public abstract class Animaux extends ComposantJeu{
         return Utils.elementAutours(matrice,x,y);
     }
 
+    public Map<String, ComposantJeu> elementAutoursADeuxCases(Map<Integer, List<ComposantJeu>> matrice)
+    {
+        Map<String, ComposantJeu> eltsAutours = new TreeMap<>();
+        int x = this.getPosition().getX();
+        int y = this.getPosition().getY();
+
+     /*   if (sensValide(x , y+1,matrice)) {
+            eltsAutours.put("D", matrice.get(x).get(y + 1));
+        }
+        if (sensValide(x , y-1,matrice)) {
+            eltsAutours.put("G", matrice.get(x).get(y - 1));
+        }
+        if (sensValide(x - 1, y,matrice)) {
+            eltsAutours.put("H", matrice.get(x - 1).get(y));
+        }
+        if (sensValide(x + 1, y,matrice)) {
+            eltsAutours.put("B", matrice.get(x + 1).get(y));
+        }*/
+        return Utils.elementAutoursADeuxCases(matrice,x,y);
+    }
+    public List<Position> posADeuxCases(Map<Integer, List<ComposantJeu>> matrice)
+    {
+
+        int x = this.getPosition().getX();
+        int y = this.getPosition().getY();
+
+        return Utils.possiblePositionsADeuxCases(matrice, x, y);
+    }
     /**
      * trouve la direction prioriataire pour un animal
      * @param matrice la zone de jeu
      */
-    public abstract void directionPrioritaire(Map<Integer, List<ComposantJeu>> matrice);
+    //public abstract void directionPrioritaire(Map<Integer, List<ComposantJeu>> matrice);
 /*
     public boolean sensValide(int x, int y, Map<Integer, List<ComposantJeu>> matrice){
         try {
@@ -123,8 +151,11 @@ public abstract class Animaux extends ComposantJeu{
             int col =caseAmodifier(sens)[0];
             int row =caseAmodifier(sens)[1];
 
+
+            ZoneVide vide=new ZoneVide();
+            vide.initPosition(this.getPosition().getX(), this.getPosition().getY());
             matrice.get(this.getPosition().getX()).remove(this.getPosition().getY());
-            matrice.get(this.getPosition().getX()).add(this.getPosition().getY(), new ZoneVide());
+            matrice.get(this.getPosition().getX()).add(this.getPosition().getY(), vide);
 
             matrice.get(col).remove(row);
             matrice.get(col).add(row, this);
@@ -137,14 +168,34 @@ public abstract class Animaux extends ComposantJeu{
         }
     }
 
+    protected boolean seDeplacerViaPostion(Map<Integer, List<ComposantJeu>> matrice, Position new_pos){
+        try {
+            ZoneVide vide=new ZoneVide();
+            vide.initPosition(this.getPosition().getX(), this.getPosition().getY());
+
+
+            matrice.get(this.getPosition().getX()).remove(this.getPosition().getY());
+            matrice.get(this.getPosition().getX()).add(this.getPosition().getY(), vide);
+
+
+            matrice.get(new_pos.getX()).remove(new_pos.getY());
+            matrice.get(new_pos.getX()).add(new_pos.getY(), this);
+            this.setPosition(new_pos.getX(),new_pos.getX());
+
+            return true;
+        }
+        catch (IndexOutOfBoundsException | NullPointerException e){
+            return false;
+        }
+    }
 
     /**
      * savoir si l'animal à manger à côté du personnage
      * @param matrice la zonz de jzu
      * @return True si l'animal à manger à côté du personnage
      */
-    public abstract boolean aMangerApproximite(Map<Integer, List<ComposantJeu>> matrice);
+    //public abstract boolean aMangerApproximite(Map<Integer, List<ComposantJeu>> matrice);
 
-    public abstract void manger(Map<Integer, List<ComposantJeu>> matrice, String sens);
-    public abstract void seDeplacerCaseVide(Map<Integer, List<ComposantJeu>> matrice);
+    //public abstract void manger(Map<Integer, List<ComposantJeu>> matrice, String sens);
+    //public abstract void seDeplacerCaseVide(Map<Integer, List<ComposantJeu>> matrice);
 }

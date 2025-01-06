@@ -2,6 +2,7 @@ package org.example.modele.animaux;
 
 import org.example.modele.*;
 import org.example.modele.aliments.Champignon;
+import org.example.modele.aliments.ChampignonVenimeux;
 import org.example.modele.aliments.Gland;
 import org.example.modele.personnages.Personnage;
 
@@ -16,19 +17,10 @@ public class Ecureil extends Animaux implements Observateur {
         id = ++globalIdCounter;
     }
 
-    String priorite;
-    public boolean priority_gland = false;
-    public String sens_assoc_gland;
-    public boolean priority_champignon = false;
-    public String sens_assoc_champignon;
-    public boolean priority_standard = false;
-    public boolean peut_devenir_ami = false;
-    public boolean est_entoure_vegetaux = false;
-    public String sens_assoc_standard;
 
     private boolean estRassasie;
 
-    public List<String> sensAleatoire = new ArrayList<>();
+
     private int nbrTour;
 
     public int getId() {
@@ -37,15 +29,29 @@ public class Ecureil extends Animaux implements Observateur {
 
     Personnage personnage;
     public boolean estAmi;
+    public boolean estRefugieArbre;
+    public boolean estRefugieBuisson;
+
+    public boolean estEffraye;
+    public boolean estJankie;
+
+    private int nbrTourEffraye;
     private String rep;
     EtatEcureil etatEcureil;
 
     public Ecureil() {
+        estJankie=false;
+        estEffraye=false;
         estAmi = false;
+        estRefugieArbre=false;
+        estRefugieBuisson=false;
+
+
         estRassasie = true;
         nbrTour = 5;
+        nbrTourEffraye=3;
         rep = Colors.BLUE.getCode() + "E" + Colors.RESET.getCode();
-        etatEcureil=new EcureilRassasie();
+        setEtatEcureil(new EcureilRassasie());
     }
 
     public void setEtatEcureil(EtatEcureil etatEcureil) {
@@ -57,141 +63,198 @@ public class Ecureil extends Animaux implements Observateur {
         return rep;
     }
 
+
+    public boolean isEstRefugieArbre() {
+        return estRefugieArbre;
+    }
+
+    public void setEstRefugieArbre(boolean estRefugieArbre) {
+        this.estRefugieArbre = estRefugieArbre;
+    }
+
+    public boolean isEstRefugieBuisson() {
+        return estRefugieBuisson;
+    }
+
+    public static int getGlobalIdCounter() {
+        return globalIdCounter;
+    }
+
+    public static void setGlobalIdCounter(int globalIdCounter) {
+        Ecureil.globalIdCounter = globalIdCounter;
+    }
+
+    public boolean isEstEffraye() {
+        return estEffraye;
+    }
+
+    public void setEstEffraye(boolean estEffraye) {
+        this.estEffraye = estEffraye;
+    }
+
+    public boolean isEstJankie() {
+        return estJankie;
+    }
+
+    public void setEstJankie(boolean estJankie) {
+        this.estJankie = estJankie;
+    }
+
+    public void setEstRefugieBuisson(boolean estRefugieBuisson) {
+        this.estRefugieBuisson = estRefugieBuisson;
+    }
+
     @Override
-    public void setEtat() {
+    public void setApparence() {
 
 
         this.mettreAjouter();
+
+        if (estEffraye){
+            rep = Colors.GREEN.getCode() + "E" + Colors.RESET.getCode();
+            setEtatEcureil(new EcureilEffraye());
+            return;
+        }
+        if(estJankie){
+            rep = Colors.RED.getCode() + "E" + Colors.RESET.getCode();
+            setEtatEcureil(new EcureilJankie());
+            return;
+        }
+
+
         if (estAmi) {
             rep = Colors.PURPLE.getCode() + "E" + Colors.RESET.getCode();
         } else if (estAffameApres5tour()) {
             rep = Colors.BLACK.getCode() + "E" + Colors.RESET.getCode();
+           // setEtatEcureil(new EcureilAffame());
         } else if (estRassasie) {
+            setEtatEcureil(new EcureilRassasie());
             rep = Colors.BLUE.getCode() + "E" + Colors.RESET.getCode();
         }
-        System.out.println(rep + " est ami: " + estAmi
-                + " a fait 5 tours : " + estAffameApres5tour() + " est rassasié : " + estRassasie + " nbr tour associé: " + nbrTour);
+
+        if (estRefugieArbre){
+            rep = Colors.GREEN.getCode() + "E" + Colors.RESET.getCode();
+        }
+        if (estRefugieBuisson){
+            rep = Colors.YELLOW.getCode() + "E" + Colors.RESET.getCode();
+        }
+        /*System.out.println(rep+"pos= "+this.getPosition().toString()+" est effrayé" + " est ami: " + estAmi
+                + " a fait 5 tours : " + estAffameApres5tour()
+                + " est rassasié : " + estRassasie + " nbr tour associé: " + nbrTour);*/
+        //System.out.println(rep+" pos= "+this.getPosition().toString()+" est effrayé " + estEffraye);
 
         if (estAffameApres5tour()) {
             resetNbrTour();
             estRassasie = false;
+            estJankie=false;
+            setEtatEcureil(new EcureilAffame());
         }
+
+
 
     }
 
-    @Override
-    public void directionPrioritaire(Map<Integer, List<ComposantJeu>> matrice) {
-        Set<Map.Entry<String, ComposantJeu>> tests = elementAutours(matrice).entrySet();
+    public List<ComposantJeu> estEntoureBouA(Map<Integer, List<ComposantJeu>> matrice) {
+        this.elementAutours(matrice);
+
+        Set<Map.Entry<String, ComposantJeu>> tests = this.elementAutours(matrice).entrySet();
         Iterator<Map.Entry<String, ComposantJeu>> iterator = tests.iterator();
+
+        List<ComposantJeu> arbres=new ArrayList<>();
+        List<ComposantJeu> buissons=new ArrayList<>();
 
         while (iterator.hasNext()) {
             Map.Entry<String, ComposantJeu> paire = iterator.next();
-            String sens = paire.getKey();
             ComposantJeu composantJeu = paire.getValue();
-            if (composantJeu instanceof Gland) {
-                priority_gland = true;
-                sens_assoc_gland = sens;
+            if (composantJeu instanceof Arbre) {
+                arbres.add(composantJeu);
             }
-            if (composantJeu instanceof Champignon) {
-                priority_champignon = true;
-                sens_assoc_champignon = sens;
-            }
-            if (composantJeu instanceof ZoneVide) {
-                priority_standard = true;
-                sensAleatoire.add(sens);
+            if(composantJeu instanceof  Buisson){
+                buissons.add(composantJeu);
             }
         }
-        if (!(priority_gland || priority_champignon || priority_standard)) {
-            est_entoure_vegetaux = true;
+
+        if (!arbres.isEmpty()){
+            return  arbres;
         }
+        if (!buissons.isEmpty()){
+            return  buissons;
+        }
+        return new ArrayList<>();
     }
 
+    public List<ComposantJeu> estEntoureBuisson(Map<Integer, List<ComposantJeu>> matrice) {
+        this.elementAutours(matrice);
 
+        Set<Map.Entry<String, ComposantJeu>> tests = this.elementAutours(matrice).entrySet();
+        Iterator<Map.Entry<String, ComposantJeu>> iterator = tests.iterator();
+        List<ComposantJeu> buissons=new ArrayList<>();
+
+        while (iterator.hasNext()) {
+            Map.Entry<String, ComposantJeu> paire = iterator.next();
+            ComposantJeu composantJeu = paire.getValue();
+            if(composantJeu instanceof  Buisson){
+                buissons.add(composantJeu);
+            }
+        }
+        if (!buissons.isEmpty()){
+            return  buissons;
+        }
+        return new ArrayList<>();
+    }
+
+    public boolean isEstAmi() {
+        return estAmi;
+    }
 
     public void resetNbrTour() {
         nbrTour = 5;
     }
 
-    @Override
-    public boolean aMangerApproximite(Map<Integer, List<ComposantJeu>> matrice) {
-        this.elementAutours(matrice);
-        Set<Map.Entry<String, ComposantJeu>> tests = elementAutours(matrice).entrySet();
-        Iterator<Map.Entry<String, ComposantJeu>> iterator = tests.iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<String, ComposantJeu> paire = iterator.next();
-            ComposantJeu composantJeu = paire.getValue();
-            if (composantJeu instanceof Personnage) {
-                return true;
-            }
-        }
-
-        return false;
+    public void setNbrTourEffraye(int nbrTourEffraye) {
+        this.nbrTourEffraye = nbrTourEffraye;
     }
 
-    @Override
-    public void manger(Map<Integer, List<ComposantJeu>> matrice, String sens){
-        appliquerDeplacement(matrice, sens);
-        estRassasie = true;
-        nbrTour = 5;
-        if (aMangerApproximite(matrice)) {
-            personnage.attacher(this);
-        }
-    }
-   public void  diminuerNbrTour(){
+    public void  diminuerNbrTour(){
         nbrTour--;
    }
-    @Override
-    public void seDeplacerCaseVide(Map<Integer, List<ComposantJeu>> matrice){
-        if (!sensAleatoire.isEmpty()) {
-            String seens = sensAleatoire.get(new Random().nextInt(sensAleatoire.size()));
-            appliquerDeplacement(matrice, seens);
-            this.sensAleatoire.clear();
-        }
-    }
-    @Override
-    public void seDeplacer(Map<Integer, List<ComposantJeu>> matrice) {
-        this.elementAutours(matrice);
-        this.directionPrioritaire(matrice);
 
-        String priorite = (priority_gland && !estRassasie) ? "gland" :
-                (priority_champignon && !estRassasie) ? "champignon" :
-                        priority_standard ? "standard" : "none";
+    public int getNbrTourEffraye() {
+        return nbrTourEffraye;
+    }
+
+    public void diminuerNbrTouEffraye(){
+        nbrTourEffraye--;
+    }
+
+    @Override
+    public Map<Integer, List<ComposantJeu>>  seDeplacer(Map<Integer, List<ComposantJeu>> matrice) {
+   /*     if(estEffraye){
+            setEtatEcureil(new EcureilEffraye());
+            etatEcureil.deplacer(this,matrice);
+            return;
+        }
+        if(isEstJankie()){
+            setEtatEcureil(new EcureilJankie());
+            etatEcureil.deplacer(this,matrice);
+            return;
+        }
+
         if (estRassasie){
-            etatEcureil=new EcureilRassasie();
+            setEtatEcureil(new EcureilRassasie());
         }
         else {
-            etatEcureil=new EcureilAffame();
-        }
-        etatEcureil.deplacer(this,matrice);
-
-/*        switch (priorite) {
-            case "gland":
-                manger(matrice, sens_assoc_gland);
-
-                break;
-            case "champignon":
-                manger(matrice,sens_assoc_champignon);
-                etatEcureil=new EcureilAffame();
-                break;
-            case "standard":
-                seDeplacerCaseVide(matrice);
-                break;
-            default:
-                break;
+            setEtatEcureil(new EcureilAffame());
         }*/
-        //nbrTour--;
-        //priority_standard = false;
-        //priority_gland = false;
-        //priority_champignon = false;
-        //sens_assoc_gland = null;
-        //sens_assoc_champignon = null;
-        //sens_assoc_standard = null;
 
+        etatEcureil.deplacer(this,matrice);
+        return matrice;
     }
 
     public boolean estAffameApres5tour() {
         return nbrTour <= 0;
     }
+
 
 
     @Override
@@ -221,4 +284,7 @@ public class Ecureil extends Animaux implements Observateur {
     public void setNbrTour(int nbrTour) {
         this.nbrTour = nbrTour;
     }
+
+
+
 }

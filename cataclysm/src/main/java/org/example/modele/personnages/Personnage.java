@@ -19,6 +19,8 @@ public class Personnage extends ComposantJeu implements Sujet {
     private PosPersonnage position;
     private List<ComposantJeu> objetRamasser = new ArrayList<>();
 
+    private List<Observateur> aProteger=new ArrayList<>();
+
 
     /**
      * obtenir l'instance de la classe personnage
@@ -229,6 +231,9 @@ public class Personnage extends ComposantJeu implements Sujet {
         if(!this.amis.isEmpty()){
             Observateur animaux= this.amis.get(new Random().nextInt(this.amis.size()));
             detacher(animaux);
+            if( aProteger.contains(animaux)){
+                aProteger.remove(animaux);
+            }
             return true;
         }
 
@@ -239,6 +244,9 @@ public class Personnage extends ComposantJeu implements Sujet {
         return amis;
     }
 
+    public List<Observateur> getaProteger() {
+        return aProteger;
+    }
 
     /**
      * ajoute un animal à la liste d'amis
@@ -261,5 +269,8 @@ public class Personnage extends ComposantJeu implements Sujet {
         this.amis.remove(o);
     }
 
+    public void proteger(Observateur o){
+        aProteger.add(o);
+    }
 
 }

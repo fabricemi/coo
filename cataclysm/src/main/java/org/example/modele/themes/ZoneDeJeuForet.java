@@ -82,13 +82,13 @@ public abstract class ZoneDeJeuForet extends ZoneDeJeu {
                     case "@":
                         list.add(creator.createPersonage(i,j));
                         break;
-                    case "E":
-                        list.add(creator.createAnimal(i,j));
+                    case "E","H","R":
+                        list.add(creator.createAnimal(i,j,stringList.get(j)));
                         break;
                     case " ":
                         list.add(creator.createZoneVide(i,j));
                         break;
-                    case "G", "C":
+                    case "G", "C","M":
                         list.add(creator.createAliment(stringList.get(j)));
                         break;
                     case "A","B":

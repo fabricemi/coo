@@ -8,7 +8,7 @@ import org.example.modele.personnages.Personnage;
 public abstract class ComposantCreator {
 
 
-    public abstract Animaux createAnimal(int x, int y);
+    public abstract Animaux createAnimal(int x, int y, String rep);
 
     public abstract Vegetaux createVegetaux(String rep);
 

@@ -2,17 +2,31 @@ package org.example.modele;
 
 import org.example.modele.aliments.Aliment;
 import org.example.modele.aliments.Banane;
+import org.example.modele.aliments.ChampignonH;
 import org.example.modele.animaux.Animaux;
+import org.example.modele.animaux.Scorpion;
+import org.example.modele.animaux.Serpent;
 import org.example.modele.animaux.Singe;
 import org.example.modele.personnages.Personnage;
 
 public class JungleCreator extends ComposantCreator{
 
     @Override
-    public Animaux createAnimal(int x, int y) {
-        Singe singe=new Singe();
-        singe.initPosition(x,y);
-        return singe;
+    public Animaux createAnimal(int x, int y, String rep) {
+        if(rep.equalsIgnoreCase("S")){
+            Singe singe=new Singe();
+            singe.initPosition(x,y);
+            return  singe;
+        } else if (rep.equalsIgnoreCase("P")) {
+            Scorpion scorpion=new Scorpion();
+            scorpion.initPosition(x, y);
+            return scorpion;
+        }
+        else {
+            Serpent serpent=new Serpent();
+            serpent.initPosition(x, y);
+            return  serpent;
+        }
     }
 
     @Override
@@ -55,6 +69,9 @@ public class JungleCreator extends ComposantCreator{
                 break;
             case "C":
                 jeu=this.createChampignon();
+                break;
+            case "H":
+                jeu=new ChampignonH();
                 break;
             default:
                 throw new IllegalStateException("composant inconnu sur la carte");

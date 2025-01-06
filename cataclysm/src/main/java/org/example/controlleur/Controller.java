@@ -23,8 +23,8 @@ public class Controller {
         jeu=new Jeu(createur);
         jeu.chargerReservePersonnage(them);
         ihm.afficher(jeu.appliquerAffichage());
-
         ihm.line();
+        jeu.compte();
         while (jeu_encours){
             String act=ihm.queVoulezFaire();
             if(act.equalsIgnoreCase("Q")){
@@ -35,7 +35,10 @@ public class Controller {
             jeu.deplacerAnimaux();
             jeu.mettreAjour();
             ihm.afficher(jeu.appliquerAffichage());
+            jeu.compte();
+
             ihm.line();
+
         }
     }
 
@@ -45,11 +48,11 @@ public class Controller {
             case "D":
                 dir= ihm.saisirDirection();
                 boolean res=jeu.deplacerPersonnage(dir);
-                while (!res){
+              /*  while (!res){
                     ihm.depImpossible();
                     dir= ihm.saisirDirection();
                     res=jeu.deplacerPersonnage(dir);
-                }
+                }*/
                 break;
             case "LN":
                 dir=ihm.saisirDirection();

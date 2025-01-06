@@ -2,7 +2,10 @@ package org.example.modele.themes;
 
 import org.example.modele.*;
 import org.example.modele.aliments.Champignon;
+import org.example.modele.aliments.ChampignonVenimeux;
 import org.example.modele.animaux.Ecureil;
+import org.example.modele.animaux.Hibou;
+import org.example.modele.animaux.Renard;
 import org.example.modele.personnages.Personnage;
 
 import java.util.*;
@@ -29,6 +32,9 @@ public class ThemeForet extends Theme{
                     case ZoneVide zoneVide -> line +=Colors.GREEN_BG.getCode()+ " " + ANSI_RESET;
                     case Buisson buisson -> line +=Colors.BLACK_BG.getCode()+ ANSI_GREEN + "B" + ANSI_RESET;
                     case Arbre arbre -> line += Colors.BLACK_BG.getCode()+ ANSI_GREEN + "A" + ANSI_RESET;
+                    case ChampignonVenimeux venimeux->line+=Colors.BLUE_BG.getCode()+ANSI_YELLOW+"M"+ANSI_RESET;
+                    case Renard renard->line+="\u001B[48;5;208m"+jeu.toString();
+                    case Hibou hibou->line+=Colors.RED_BG.getCode()+hibou.toString();
                     case null, default -> line += Colors.RED_BG.getCode()+ANSI_YELLOW + "G" + ANSI_RESET;
                 }
             }

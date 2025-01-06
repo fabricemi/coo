@@ -84,13 +84,13 @@ public abstract class ZoneDeJeuJungle extends ZoneDeJeu {
                    case "@":
                        list.add(creator.createPersonage(i,j));
                        break;
-                   case "S":
-                       list.add(creator.createAnimal(i,j));
+                   case "S","P","N":
+                       list.add(creator.createAnimal(i,j, stringList.get(j)));
                        break;
                    case " ":
                        list.add(creator.createZoneVide(i,j));
                        break;
-                   case "B", "C":
+                   case "B", "C","H":
                        list.add(creator.createAliment(stringList.get(j)));
                        break;
                    case "R" , "O":
