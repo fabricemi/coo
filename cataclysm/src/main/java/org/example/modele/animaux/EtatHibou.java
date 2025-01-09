@@ -1,9 +1,6 @@
 package org.example.modele.animaux;
 
-import org.example.modele.Arbre;
-import org.example.modele.Buisson;
-import org.example.modele.ComposantJeu;
-import org.example.modele.Position;
+import org.example.modele.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,25 +90,45 @@ public abstract class EtatHibou {
         int x = hibou.getPosition().getX();
         int y = hibou.getPosition().getY();
         List<Position> positions = new ArrayList<>();
-        if (sensValide(x, y-2, matrice)) {
-            positions.add(new Position(x, y-2));
-        }
-        if (sensValide(x-2, y, matrice)) {
-            positions.add(new Position(x-2, y));
-        }
-        if (sensValide(x, y+2, matrice)) {
-           positions.add(new Position(x, y+2));
-        }
 
-
-
-
-        if (sensValide(x+2, y, matrice)) {
-            positions.add(new Position(x+2, y));
+        // Vérification pour la case au-dessus (y - 2)
+        if (sensValide(x, y - 2, matrice)) {
+            ComposantJeu caseHaut = matrice.get(x).get(y - 2);
+            if (isValidComposant(caseHaut)) {
+                positions.add(new Position(x, y - 2));
+            }
         }
 
+        // Vérification pour la case à gauche (x - 2)
+        if (sensValide(x - 2, y, matrice)) {
+            ComposantJeu caseGauche = matrice.get(x - 2).get(y);
+            if (isValidComposant(caseGauche)) {
+                positions.add(new Position(x - 2, y));
+            }
+        }
+
+        // Vérification pour la case en bas (y + 2)
+        if (sensValide(x, y + 2, matrice)) {
+            ComposantJeu caseBas = matrice.get(x).get(y + 2);
+            if (isValidComposant(caseBas)) {
+                positions.add(new Position(x, y + 2));
+            }
+        }
+
+        // Vérification pour la case à droite (x + 2)
+        if (sensValide(x + 2, y, matrice)) {
+            ComposantJeu caseDroite = matrice.get(x + 2).get(y);
+            if (isValidComposant(caseDroite)) {
+                positions.add(new Position(x + 2, y));
+            }
+        }
 
         return positions;
-
     }
+
+    // Cette méthode vérifie si un composant est valide pour un mouvement
+    private boolean isValidComposant(ComposantJeu composant) {
+        return composant instanceof ZoneVide || composant instanceof Vegetaux;
+    }
+
 }

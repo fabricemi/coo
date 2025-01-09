@@ -30,7 +30,6 @@ public class GenerateurParFichier {
             String lines;
             int j=0;
             while ((lines=bufferedReader.readLine())!=null){
-                System.out.println(lines.length());
                 List<String> list=new ArrayList<>();
                 for (int i=0;i<lines.length(); i++) {
                     list.add(String.valueOf(lines.charAt(i)));

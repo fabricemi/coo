@@ -96,6 +96,12 @@ public abstract class ZoneDeJeuJungle extends ZoneDeJeu {
                    case "R" , "O":
                        list.add(creator.createVegetaux(stringList.get(j)));
                        break;
+                   case "L":
+                       list.add(j, creator.createPierre2());
+                       break;
+                   case "Z":
+                       list.add(j, creator.createPierre3());
+                       break;
                    default:
                        throw new RuntimeException("caracteres inconnue");
                }

@@ -15,6 +15,12 @@ public class HibouAuRepos extends EtatHibou{
             hibou.setNbTourRestant(1);
             hibou.setEstRassasie(false);
         }
+
+        int x=hibou.getPosition().getX();
+        int y=hibou.getPosition().getY();
+
+        matrice.get(x).remove(y);
+        matrice.get(x).add(y, hibou);
     }
 
     @Override

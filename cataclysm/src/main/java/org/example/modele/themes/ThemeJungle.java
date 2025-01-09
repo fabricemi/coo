@@ -2,6 +2,9 @@ package org.example.modele.themes;
 
 import org.example.modele.*;
 import org.example.modele.aliments.Champignon;
+import org.example.modele.aliments.ChampignonH;
+import org.example.modele.animaux.Scorpion;
+import org.example.modele.animaux.Serpent;
 import org.example.modele.animaux.Singe;
 import org.example.modele.personnages.Personnage;
 
@@ -34,13 +37,23 @@ public class ThemeJungle extends Theme{
                     line+=ANSI_GREEN+"A"+ANSI_RESET;
                 } else if (jeu instanceof Cocotier) {
                     line+=ANSI_GREEN+"O"+ANSI_RESET;
+                } else if (jeu instanceof ChampignonH) {
+                    line+=ANSI_WHITE+"H"+ANSI_RESET;
+                } else if (jeu instanceof Pierre2) {
+                    line+=ANSI_RED+"L"+ANSI_RESET;
+                } else if (jeu instanceof Pierre3) {
+                    line+=ANSI_RED+"Z"+ANSI_RESET;
+                } else if (jeu instanceof Serpent) {
+                    line+=ANSI_YELLOW+"N"+ANSI_RESET;
+                } else if (jeu instanceof Scorpion) {
+                    line+=ANSI_YELLOW+"P"+ANSI_RESET;
                 } else {
                     line+=ANSI_YELLOW+"B"+ANSI_RESET;
                 }
             }
             list.add(line);
         }
-
+       
         return list;
     }
 

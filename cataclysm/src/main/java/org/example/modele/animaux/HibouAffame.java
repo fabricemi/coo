@@ -8,18 +8,20 @@ import java.util.Random;
 
 public class HibouAffame extends EtatHibou {
     @Override
-    public void seDeplacer(Map<Integer, List<ComposantJeu>> matrice, Hibou h) {
-        Hibou hibou=h;
+    public void seDeplacer(Map<Integer, List<ComposantJeu>> matrice, Hibou hibou) {
         List<Ecureil> ecureils = ecureilsAutours(matrice, hibou);
-        System.out.println(ecureils + " pour " + hibou.getPosition());
         if (!ecureils.isEmpty()) {
             Ecureil ecureil = ecureils.get(0);
 
-            if (!ecureil.estRefugieBuisson) {
+            if (!(ecureil.isEstRefugieBuisson() || ecureil.isEstRefugieArbre())) {
                 List<ComposantJeu> vegetaux = ecureil.estEntoureBuisson(matrice);
                 if (!vegetaux.isEmpty()) {
                     ecureil.setEstEffraye(true);
                     ecureil.setEstRefugieBuisson(true);
+                    ecureil.setEstRefugieArbre(false);
+                    System.out.println("hibou "+hibou.getPosition()+" a effrayé "+ecureil.getPosition());
+                    ecureil.setEtatEcureil(new EcureilEffraye());
+                    //ecureil.seDeplacer(matrice);
                 } else {
                     int dx = ecureil.getPosition().getX();
                     int dy = ecureil.getPosition().getY();
@@ -27,10 +29,17 @@ public class HibouAffame extends EtatHibou {
 
                     ZoneVide vide1 = new ZoneVide();
                     vide1.initPosition(hibou.getPosition().getX(), hibou.getPosition().getY());
-
-
                     matrice.get(hibou.getPosition().getX()).remove(hibou.getPosition().getY());
-                    matrice.get(hibou.getPosition().getX()).add(hibou.getPosition().getY(), vide1);
+                    System.out.println("l'ecureil mangé est ami avce le personnage "+ecureil.isEstAmi());
+                    if (!hibou.getSurLeComposant().isEmpty()) {
+                        matrice.get(hibou.getPosition().getX()).add(hibou.getPosition().getY(),
+                                hibou.getSurLeComposant().get(0));
+
+                        hibou.supp();
+                    } else {
+                        matrice.get(hibou.getPosition().getX()).add(hibou.getPosition().getY(), vide1);
+                    }
+
 
 
                     matrice.get(dx).remove(ecureil);
@@ -38,9 +47,10 @@ public class HibouAffame extends EtatHibou {
 
                     hibou.setEstRassasie(true);
                     //hibou.setEtatHibou(new HibouAuRepos());
-                    hibou.setPosition(dx,dy);
+
+                    hibou.setPosition(dx, dy);
                     //hibou.setApparence();
-                    return;
+
                 }
             }
         }
@@ -55,18 +65,16 @@ public class HibouAffame extends EtatHibou {
 
             matrice.get(hibou.getPosition().getX()).remove(hibou.getPosition().getY());
 
-            if(!hibou.getSurLeComposant().isEmpty()){
+            if (!hibou.getSurLeComposant().isEmpty()) {
                 matrice.get(hibou.getPosition().getX()).add(hibou.getPosition().getY(),
                         hibou.getSurLeComposant().get(0));
 
                 hibou.supp();
-            }
-            else {
+            } else {
                 matrice.get(hibou.getPosition().getX()).add(hibou.getPosition().getY(), vide);
             }
 
-            if(matrice.get(position.getX()).get(position.getY()) instanceof Arbre
-                    || matrice.get(position.getX()).get(position.getY()) instanceof Buisson){
+            if (matrice.get(position.getX()).get(position.getY()) instanceof Vegetaux) {
 
                 hibou.estSurLeComposant(matrice.get(position.getX()).get(position.getY()));
 
@@ -74,12 +82,12 @@ public class HibouAffame extends EtatHibou {
 
                 matrice.get(position.getX()).add(position.getY(), hibou);
 
-            } else if (matrice.get(position.getX()).get(position.getY()) instanceof ZoneVide)
-            {
+
+            } else {
                 matrice.get(position.getX()).remove(position.getY());
                 matrice.get(position.getX()).add(position.getY(), hibou);
             }
-
+            System.out.println("hibou "+hibou.getPosition()+" deplacé à la position :" +position);
             hibou.setPosition(position.getX(), position.getY());
         }
 

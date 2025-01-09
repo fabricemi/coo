@@ -37,7 +37,9 @@ public class Ihm {
         actionsPersonnage.add("LN");
         //actionsPersonnage.add("AA");
         actionsPersonnage.add("RO");
+        actionsPersonnage.add("RP");
         actionsPersonnage.add("DC");
+        actionsPersonnage.add("R");
         actionsPersonnage.add("Q");
 
         directions.add("H");
@@ -85,7 +87,7 @@ public class Ihm {
     public String queVoulezFaire(){
         System.out.println("Que voullez vous faire?");
         String msg="seDeplacer(D/d)|LancerNourriture(LN/ln)|" +
-                "ramasserObjet(RO/ro)|donnerCoup(DC/dc)|quittez le jeu(Q/q)";
+                "ramasserObjet(RO/ro)|donnerCoup(DC/dc)|quittez le jeu(Q/q)|deposer animal(R/r)|pierre (RP/rp)";
         System.out.println(msg);
         String string=scanner.nextLine();
         while (!actionsPersonnage.contains(string.toUpperCase())){

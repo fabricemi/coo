@@ -9,6 +9,8 @@ import java.util.TreeMap;
 
 public abstract class Animaux extends ComposantJeu{
     protected Position position;
+
+
     public void initPosition(int x, int y) {
         this.position = new Position(x,y);
     }
@@ -180,7 +182,7 @@ public abstract class Animaux extends ComposantJeu{
 
             matrice.get(new_pos.getX()).remove(new_pos.getY());
             matrice.get(new_pos.getX()).add(new_pos.getY(), this);
-            this.setPosition(new_pos.getX(),new_pos.getX());
+            this.setPosition(new_pos.getX(),new_pos.getY());
 
             return true;
         }
@@ -189,13 +191,11 @@ public abstract class Animaux extends ComposantJeu{
         }
     }
 
-    /**
-     * savoir si l'animal à manger à côté du personnage
-     * @param matrice la zonz de jzu
-     * @return True si l'animal à manger à côté du personnage
-     */
+
     //public abstract boolean aMangerApproximite(Map<Integer, List<ComposantJeu>> matrice);
 
     //public abstract void manger(Map<Integer, List<ComposantJeu>> matrice, String sens);
     //public abstract void seDeplacerCaseVide(Map<Integer, List<ComposantJeu>> matrice);
+
+
 }

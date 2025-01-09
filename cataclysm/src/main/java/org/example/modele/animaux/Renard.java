@@ -10,8 +10,9 @@ import java.util.*;
 public class Renard extends Animaux {
     private String rep;
 
-    public Renard() {
+    public Renard(int x, int y) {
         rep = Colors.BLACK.getCode() + "R" + Colors.RESET.getCode();
+        initPosition(x, y);
     }
 
     @Override
@@ -73,10 +74,11 @@ public class Renard extends Animaux {
         if (!vegetaux.isEmpty()) {
             Vegetaux v=(Vegetaux) vegetaux.get(0);
             if (v instanceof Arbre) {
-                //ecureil.setEstEffraye(true);
+                ecureil.setEstEffraye(true);
                 //ecureil.setEstRefugieArbre(true);
+                ecureil.setEtatEcureil(new EcureilEffraye());
                 ecureil.seDeplacer(matrice);
-                System.out.println("effrayé situé à: "+ecureil.getPosition());
+
                 return false;
             }
         }

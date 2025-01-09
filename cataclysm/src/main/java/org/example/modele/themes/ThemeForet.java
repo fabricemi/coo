@@ -35,6 +35,8 @@ public class ThemeForet extends Theme{
                     case ChampignonVenimeux venimeux->line+=Colors.BLUE_BG.getCode()+ANSI_YELLOW+"M"+ANSI_RESET;
                     case Renard renard->line+="\u001B[48;5;208m"+jeu.toString();
                     case Hibou hibou->line+=Colors.RED_BG.getCode()+hibou.toString();
+                    case Pierre2 pierre2->line += Colors.YELLOW_BG.getCode()+jeu.toString();
+                    case Pierre3 pierre3->line += Colors.YELLOW_BG.getCode()+jeu.toString();
                     case null, default -> line += Colors.RED_BG.getCode()+ANSI_YELLOW + "G" + ANSI_RESET;
                 }
             }

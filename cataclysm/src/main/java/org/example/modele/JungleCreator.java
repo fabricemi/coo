@@ -2,6 +2,7 @@ package org.example.modele;
 
 import org.example.modele.aliments.Aliment;
 import org.example.modele.aliments.Banane;
+import org.example.modele.aliments.Champignon;
 import org.example.modele.aliments.ChampignonH;
 import org.example.modele.animaux.Animaux;
 import org.example.modele.animaux.Scorpion;
@@ -62,22 +63,19 @@ public class JungleCreator extends ComposantCreator{
 
     @Override
     public Aliment createAliment(String rep) {
-        Aliment jeu;
-        switch (rep){
-            case "B":
-                jeu=new Banane();
-                break;
-            case "C":
-                jeu=this.createChampignon();
-                break;
-            case "H":
-                jeu=new ChampignonH();
-                break;
-            default:
-                throw new IllegalStateException("composant inconnu sur la carte");
+        Aliment aliment;
+        if (rep.equals("B")) {
+            aliment = new Banane();
+        } else if (rep.equals("C")) {
+            aliment = this.createChampignon();
+        } else if (rep.equals("H")) {
+            aliment = new ChampignonH();
+        } else {
+            throw new IllegalStateException("Composant inconnu sur la carte");
         }
-        return jeu;
+        return aliment;
     }
+
 
 
 }

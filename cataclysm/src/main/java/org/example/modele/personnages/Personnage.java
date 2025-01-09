@@ -3,6 +3,7 @@ package org.example.modele.personnages;
 
 import org.example.modele.*;
 import org.example.modele.aliments.Aliment;
+import org.example.modele.animaux.Animaux;
 import org.example.modele.animaux.Ecureil;
 import org.example.modele.animaux.Singe;
 
@@ -12,14 +13,14 @@ public class Personnage extends ComposantJeu implements Sujet {
 
     private static Personnage instance;
 
-    private StratDepPersonnage stratDepPersonnage;
+    public StratDepPersonnage stratDepPersonnage;
 
-    private List<Observateur> amis=new ArrayList<>();
+    public List<Observateur> amis=new ArrayList<>();
 
-    private PosPersonnage position;
-    private List<ComposantJeu> objetRamasser = new ArrayList<>();
-
-    private List<Observateur> aProteger=new ArrayList<>();
+    public PosPersonnage position;
+    public List<ComposantJeu> objetRamasser = new ArrayList<>();
+    public List<ComposantJeu> pierres = new ArrayList<>();
+    public List<Observateur> aProteger=new ArrayList<>();
 
 
     /**
@@ -121,7 +122,35 @@ public class Personnage extends ComposantJeu implements Sujet {
 
         return Utils.elementAutours(matrice, x,y);
     }
+    public int ramasserPierre(Map<Integer, List<ComposantJeu>> matrice, String sens) {
+        try{
+            Map<String, ComposantJeu> eltsAutours = this.elementAutours(matrice);
+            System.out.println("est entouré de: "+eltsAutours);
+            if(eltsAutours.containsKey(sens)){
+                ComposantJeu cps=eltsAutours.get(sens);
+                int col=this.caseAmodifier(sens)[0];
+                int row=this.caseAmodifier(sens)[1];
+                System.out.println();
+                if(cps instanceof Pierre2){
+                    matrice.get(col).remove(row);
+                    matrice.get(col).add(row,new ZoneVide());
+                    System.out.println("test 2");
+                    return 2;
+                } else if (cps instanceof Pierre3) {
+                    System.out.println("test 3");
+                    return 3;
+                }
+                else {
+                    return 0;
+                }
+            }
+            return 0;
 
+        }
+        catch (IndexOutOfBoundsException | NullPointerException i){
+            return 0;
+        }
+    }
     /**
      * ajoute un objet à la liste d'objet ramasser
      * @param matrice la carte du jeu
@@ -139,6 +168,30 @@ public class Personnage extends ComposantJeu implements Sujet {
                     this.objetRamasser.add(cps);
                     matrice.get(col).remove(row);
                     matrice.get(col).add(row,new ZoneVide());
+                    return true;
+                }
+            }
+            return false;
+        }
+        catch (IndexOutOfBoundsException | NullPointerException i){
+            return false;
+        }
+    }
+
+    public boolean reposerAnimal(Map<Integer, List<ComposantJeu>> matrice, Animaux a, String sens) {
+        try{
+            Map<String, ComposantJeu> eltsAutours = this.elementAutours(matrice);
+            if(eltsAutours.containsKey(sens) && !objetRamasser.isEmpty()){
+                ComposantJeu cps=eltsAutours.get(sens);
+                //ComposantJeu oar= objetRamasser.get(new Random().nextInt(objetRamasser.size()));
+                if(cps instanceof ZoneVide){
+                    int col=this.caseAmodifier(sens)[0];
+                    int row=this.caseAmodifier(sens)[1];
+                    matrice.get(col).remove(row);
+                    matrice.get(col).add(row,a);
+
+                    this.objetRamasser.remove(a);
+                    a.setPosition(col,row);
                     return true;
                 }
             }
@@ -240,6 +293,17 @@ public class Personnage extends ComposantJeu implements Sujet {
         return false;
     }
 
+
+
+    public boolean reposer(Map<Integer, List<ComposantJeu>> matrice, String sens){
+        if (aProteger.isEmpty()){
+            return false;
+        }
+
+        Animaux animaux=(Animaux) aProteger.get(new Random().nextInt(aProteger.size()));
+        return reposerAnimal(matrice, animaux, sens);
+
+    }
     public List<Observateur> getAmis() {
         return amis;
     }

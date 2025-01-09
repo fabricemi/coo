@@ -1,5 +1,5 @@
 package org.example.modele;
 
-public class ComposantJeu {
+public  class ComposantJeu {
 
 }

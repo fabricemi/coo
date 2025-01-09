@@ -1,9 +1,6 @@
 package org.example.modele.animaux;
 
-import org.example.modele.Arbre;
-import org.example.modele.ComposantJeu;
-import org.example.modele.Observateur;
-import org.example.modele.ZoneVide;
+import org.example.modele.*;
 import org.example.modele.aliments.ChampignonVenimeux;
 import org.example.modele.personnages.Personnage;
 
@@ -29,10 +26,9 @@ public class EcureilAffame extends EtatEcureil{
             fuireDanger(matrice, ecureuil);
             return;
         }
-
          if (priority_standard) {
             seDeplacerCaseVide(matrice, ecureuil);
-             ecureuil.diminuerNbrTour();
+            ecureuil.diminuerNbrTour();
         }
 
         System.out.println("affamé");
@@ -42,8 +38,8 @@ public class EcureilAffame extends EtatEcureil{
     private void manger(Map<Integer, List<ComposantJeu>> matrice, String sens,Ecureil ecureuil){
         //appliquerDeplacement(matrice, sens,ecureuil);
         seDeplacerPourManger(matrice, sens, ecureuil);
-        ecureuil.setNbrTour(5);
-        ecureuil.setEstRassasie(true);
+
+
         if (aMangerApproximite(matrice, ecureuil)) {
             Personnage.getInstance().attacher(ecureuil);
         }
@@ -61,13 +57,22 @@ public class EcureilAffame extends EtatEcureil{
             matrice.get(ecureuil.getPosition().getX()).remove(ecureuil.getPosition().getY());
             matrice.get(ecureuil.getPosition().getX()).add(ecureuil.getPosition().getY(), vide);
 
+            //ecureuil.setEstRassasie(true);
+            //ecureuil.setEstJankie(false);
             if(matrice.get(col).get(row) instanceof ChampignonVenimeux){
                 ecureuil.setEstJankie(true);
+                //ecureuil.setEstRassasie(false);
+                ecureuil.setEtatEcureil(new EcureilJankie());
+            }
+            else {
+                ecureuil.setEtatEcureil(new EcureilRassasie());
+                ecureuil.setEstRassasie(true);
             }
 
             matrice.get(col).remove(row);
             matrice.get(col).add(row, ecureuil);
             ecureuil.setPosition(col,row);
+            ecureuil.setNbrTour(6);
             return true;
         }
         catch (IndexOutOfBoundsException | NullPointerException e){
@@ -76,6 +81,8 @@ public class EcureilAffame extends EtatEcureil{
     }
 
 
-
-
+    @Override
+    public String toString() {
+        return  Colors.BLACK.getCode() + "E" + Colors.RESET.getCode();
+    }
 }

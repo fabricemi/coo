@@ -22,23 +22,36 @@ public class Controller {
         CtlInitZone(them,typegen);
         jeu=new Jeu(createur);
         jeu.chargerReservePersonnage(them);
-        ihm.afficher(jeu.appliquerAffichage());
+        ihm.afficher(jeu.appliquerAffichage(jeu.getMatriceCarte()));
         ihm.line();
+        Historique.getInstance().addState(jeu.getMatriceCarte());
+        //Historique.getInstance().addState(jeu.getMatriceCarte());
         jeu.compte();
+        jeu.compterHiboux();
         while (jeu_encours){
             String act=ihm.queVoulezFaire();
             if(act.equalsIgnoreCase("Q")){
                 ihm.close();
                 break;
             }
-            setAction(act);
-            jeu.deplacerAnimaux();
-            jeu.mettreAjour();
-            ihm.afficher(jeu.appliquerAffichage());
+            if (act.equalsIgnoreCase("RP")){
+                String dd=ihm.saisirDirection();
+                boolean p=jeu.remonterTemps(dd);
+                if(!p){
+                    ihm.impossible();
+                }
+            }
+            else {
+                setAction(act);
+                jeu.deplacerAnimaux();
+                jeu.mettreAjour();
+                Historique.getInstance().addState(jeu.getMatriceCarte());
+            }
+            ihm.afficher(jeu.appliquerAffichage(jeu.getMatriceCarte()));
             jeu.compte();
-
+            jeu.compterHiboux();
+            System.out.println(Historique.getInstance().getEtats().size());
             ihm.line();
-
         }
     }
 
@@ -74,6 +87,15 @@ public class Controller {
                 boolean resu=jeu.donnerCoup();
                 if(!resu){
                     ihm.plusAnimals();
+                }
+                break;
+            case "R":
+                dir=ihm.saisirDirection();
+                boolean depot=jeu.reposer(dir);
+                while (!depot){
+                    ihm.impossible();
+                    dir=ihm.saisirDirection();
+                    depot=jeu.reposer(dir);
                 }
                 break;
             default:

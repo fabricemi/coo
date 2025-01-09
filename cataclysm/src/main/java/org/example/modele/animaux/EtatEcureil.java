@@ -8,7 +8,7 @@ import org.example.modele.personnages.Personnage;
 
 import java.util.*;
 
-public abstract class EtatEcureil  {
+public abstract class EtatEcureil implements Cloneable {
     protected boolean priority_gland = false;
     protected String sens_assoc_gland;
     protected boolean priority_champignon = false;
@@ -208,7 +208,7 @@ public abstract class EtatEcureil  {
         }
     }
 
-    public void fuireDanger(Map<Integer, List<ComposantJeu>> matrice, Ecureil ecureuil){
+    public int fuireDanger(Map<Integer, List<ComposantJeu>> matrice, Ecureil ecureuil){
         ecureuil.mettreAjouter();
         if(ecureuil.isEstAmi() && aMangerApproximite(matrice,ecureuil)){
             Personnage.getInstance().proteger(ecureuil);
@@ -219,9 +219,9 @@ public abstract class EtatEcureil  {
             matrice.get(ecureuil.getPosition().getX()).remove(ecureuil);
             matrice.get(ecureuil.getPosition().getX()).add(ecureuil.getPosition().getY(), vide1);
 
-            System.out.println("protégé");
+            //System.out.println("protégé");
 
-            return;
+            return 1;
         }
 
         if(!ecureuil.estEntoureBouA(matrice).isEmpty()){
@@ -229,19 +229,29 @@ public abstract class EtatEcureil  {
             Vegetaux v=(Vegetaux) jeus.get(new Random().nextInt(jeus.size()));
             if(v instanceof Arbre){
                 ecureuil.setEstRefugieArbre(true);
-                ecureuil.setEstRefugieBuisson(false);
+                System.out.println("perché à la postion "+ecureuil.getPosition());
+                return 2;
             }
             else {
                 ecureuil.setEstRefugieBuisson(true);
-                ecureuil.setEstRefugieArbre(false);
+                System.out.println("perché à la position "+ecureuil.getPosition());
+                return 3;
             }
-            System.out.println("perché");
-            return;
+
         }
 
         setSensDanger(verifierDanger(matrice,ecureuil));
         courir(ecureuil,sens_oppos_danger,matrice);
-        ecureuil.diminuerNbrTour();
         System.out.println("sens inverse");
+        return 4;
+    }
+
+    @Override
+    public EtatEcureil clone() {
+        try {
+            return (EtatEcureil) super.clone();  // Clonage superficiel de l'état
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException("Échec du clonage de l'état", e);
+        }
     }
 }

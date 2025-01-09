@@ -21,4 +21,13 @@ public abstract class ComposantCreator {
     public abstract Personnage createPersonage(int x, int y);
     public abstract Aliment createAliment(String rep);
 
+    public Pierre2 createPierre2(){
+        return new Pierre2();
+    }
+
+    public Pierre3 createPierre3(){
+        return new Pierre3();
+    }
+
+
 }

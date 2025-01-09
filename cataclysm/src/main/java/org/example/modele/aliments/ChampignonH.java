@@ -1,4 +1,6 @@
 package org.example.modele.aliments;
 
-public class ChampignonH extends Champignon{
+import org.example.modele.ComposantJeu;
+
+public class ChampignonH extends Aliment {
 }

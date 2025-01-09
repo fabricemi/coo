@@ -1,5 +1,6 @@
 package org.example.modele.animaux;
 
+import org.example.modele.Colors;
 import org.example.modele.ComposantJeu;
 import org.example.modele.Position;
 import org.example.modele.Utils;
@@ -12,16 +13,27 @@ public class EcureilJankie extends EtatEcureil{
     @Override
     public void deplacer(Ecureil ecureuil, Map<Integer, List<ComposantJeu>> matrice) {
         List<Position> positionsList= Utils.possiblePositionsADeuxCases(
-                matrice,ecureuil.getPosition().getX(),ecureuil.getPosition().getY()
+                matrice,ecureuil.getPosition().getX(),
+                ecureuil.getPosition().getY()
         );
 
         if(!positionsList.isEmpty()){
             Position position=positionsList.get(new Random().nextInt(positionsList.size()));
             ecureuil.seDeplacerViaPostion(matrice, position);
-            ecureuil.diminuerNbrTour();
+
+            System.out.println("jankie à la position "+ecureuil.getPosition());
         }
+        ecureuil.diminuerNbrTour();
+        if (ecureuil.estAffameApres5tour()) {
+            ecureuil.setEstJankie(false);
+            ecureuil.setEstRassasie(false);
+
+        }
+        System.out.println(positionsList);
     }
 
-
-
+    @Override
+    public String toString() {
+        return Colors.RED.getCode() + "E" + Colors.RESET.getCode();
+    }
 }

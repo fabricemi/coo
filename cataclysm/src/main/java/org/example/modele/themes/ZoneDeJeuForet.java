@@ -80,19 +80,25 @@ public abstract class ZoneDeJeuForet extends ZoneDeJeu {
             for (int j=0;j<stringList.size();j++) {
                 switch (stringList.get(j)) {
                     case "@":
-                        list.add(creator.createPersonage(i,j));
+                        list.add(j,creator.createPersonage(i,j));
                         break;
                     case "E","H","R":
-                        list.add(creator.createAnimal(i,j,stringList.get(j)));
+                        list.add(j,creator.createAnimal(i,j,stringList.get(j)));
                         break;
                     case " ":
-                        list.add(creator.createZoneVide(i,j));
+                        list.add(j,creator.createZoneVide(i,j));
                         break;
                     case "G", "C","M":
-                        list.add(creator.createAliment(stringList.get(j)));
+                        list.add(j, creator.createAliment(stringList.get(j)));
                         break;
                     case "A","B":
-                        list.add(creator.createVegetaux(stringList.get(j)));
+                        list.add(j, creator.createVegetaux(stringList.get(j)));
+                        break;
+                    case "L":
+                        list.add(j, creator.createPierre2());
+                        break;
+                    case "S":
+                        list.add(j, creator.createPierre3());
                         break;
                     default:
                         throw new RuntimeException("caracteres inconnue");

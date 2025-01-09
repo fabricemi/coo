@@ -13,17 +13,17 @@ public class ForetCreator extends ComposantCreator {
     public Animaux createAnimal(int x, int y, String rep) {
 
         if (rep.equals("E")) {
-            Ecureil ecureil = new Ecureil();
-            ecureil.initPosition(x, y);
+            Ecureil ecureil = new Ecureil(x, y);
+            //ecureil.initPosition(x, y);
             return ecureil;
         } else if (rep.equals("H")) {
-            Hibou hibou = new Hibou();
-            hibou.initPosition(x, y);
+            Hibou hibou = new Hibou(x, y);
+            //hibou.initPosition(x, y);
             return hibou;
         }
         else if (rep.equals("R")){
-            Renard renard = new Renard();
-            renard.initPosition(x, y);
+            Renard renard = new Renard(x, y);
+            //renard.initPosition(x, y);
             return renard;
         }
         else {

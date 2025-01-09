@@ -33,8 +33,9 @@ public abstract class Theme {
      * applique un affichage  fonction de la zone de jeu
      * @return List<String>
      */
-    public List<String> appliquerAffichage(){
-        Set<Map.Entry<Integer, List<ComposantJeu>>> composantJeuSet= zoneDeJeu.getMatriceObjet().entrySet();
+    public List<String> appliquerAffichage(Map<Integer, List<ComposantJeu>> e){
+        //Set<Map.Entry<Integer, List<ComposantJeu>>> composantJeuSet= zoneDeJeu.getMatriceObjet().entrySet();
+        Set<Map.Entry<Integer, List<ComposantJeu>>> composantJeuSet= e.entrySet();
         Iterator<Map.Entry<Integer, List<ComposantJeu>>> iterator= composantJeuSet.iterator();
         return specificAlaZone(iterator);
     }

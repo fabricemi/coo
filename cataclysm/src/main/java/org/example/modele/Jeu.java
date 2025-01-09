@@ -1,6 +1,7 @@
 package org.example.modele;
 
 import org.example.modele.animaux.Ecureil;
+import org.example.modele.animaux.Hibou;
 import org.example.modele.themes.ThemeZoneCreateur;
 import org.example.modele.aliments.Aliment;
 import org.example.modele.aliments.Banane;
@@ -18,7 +19,7 @@ public class Jeu {
     private ZoneDeJeu zoneDeJeu;
     private Theme theme;
 
-    private  Map<Integer, List<ComposantJeu>>  composants;
+    private Map<Integer, List<ComposantJeu>> composants;
     private int nb = 0;
     List<Aliment> aliments_reserves_personnage;
 
@@ -30,11 +31,13 @@ public class Jeu {
         this.zoneDeJeu.generateCarte();
         theme.setZoneDeJeu(zoneDeJeu);
 
-        composants=zoneDeJeu.getMatriceObjet();
+        composants = zoneDeJeu.getMatriceObjet();
+        //Historique.getInstance().addState(composants);
     }
 
-    public List<String> appliquerAffichage() {
-        return theme.appliquerAffichage();
+
+    public List<String> appliquerAffichage(Map<Integer, List<ComposantJeu>> e) {
+        return theme.appliquerAffichage(e);
     }
 
     public void setAliments_reserves_personnage(List<Aliment> aliments_reserves_personnage) {
@@ -54,12 +57,19 @@ public class Jeu {
         }
     }
 
-    public Map<Integer, List<ComposantJeu>> getMatriceCarte() {
-        return composants;
-    }
 
     public void setComposants(Map<Integer, List<ComposantJeu>> composants) {
-        this.composants = composants;
+        Map<Integer, List<ComposantJeu>> map = new TreeMap<>();
+
+        for (Map.Entry<Integer, List<ComposantJeu>> entry : composants.entrySet()) {
+            Integer key = entry.getKey();
+
+            List<ComposantJeu> originalList = entry.getValue();
+            List<ComposantJeu> copiedList = new ArrayList<>(originalList);
+
+            map.put(key,copiedList);
+        }
+        this.composants = map;
     }
 
     public void setCarte(ZoneDeJeu zoneDeJeu) {
@@ -101,8 +111,12 @@ public class Jeu {
         return Personnage.getInstance().ramasserObjet(getMatriceCarte(), sens);
     }
 
+    public Map<Integer, List<ComposantJeu>> getMatriceCarte() {
+        return composants;
+    }
+
     public List<Animaux> getAnimals() {
-        Iterator<Map.Entry<Integer, List<ComposantJeu>>> iterator = getMatriceCarte().entrySet().iterator();
+        /*Iterator<Map.Entry<Integer, List<ComposantJeu>>> iterator = getMatriceCarte().entrySet().iterator();
 
         List<Animaux> animaux = new ArrayList<>();
 
@@ -115,19 +129,57 @@ public class Jeu {
             }
 
         }
+        return animaux;*/
+
+        List<Animaux> animaux = new ArrayList<>();
+        for (List<ComposantJeu> ligne : composants.values()) {
+            for (ComposantJeu composant : ligne) {
+                if (composant instanceof Animaux) {
+                    animaux.add((Animaux) composant);
+                }
+            }
+        }
         return animaux;
     }
 
+    public void addTour() {
+        Historique.getInstance().addState(getMatriceCarte());
+    }
+
+    public void deplacerAnimaux() {
+        getAnimals().forEach(
+                (a) -> {
+                    this.setComposants((a).seDeplacer(getMatriceCarte()));
+                }
+        );
+    }
+
+    public boolean reposer(String sens) {
+        return Personnage.getInstance().reposer(getMatriceCarte(), sens);
+    }
+
+    public int compterHiboux() {
+        int compteur = 0;
+        for (List<ComposantJeu> ligne : composants.values()) {
+            for (ComposantJeu composant : ligne) {
+                if (composant instanceof Hibou) {
+                    compteur++;
+                }
+            }
+        }
+        System.out.println("il y a " + compteur + " hibous");
+        return compteur;
+    }
 
 
     public void compte() {
         Iterator<Map.Entry<Integer, List<ComposantJeu>>> iterator = getMatriceCarte().entrySet().iterator();
-        int n=0;
+        int n = 0;
         while (iterator.hasNext()) {
             List<ComposantJeu> composantJeus = iterator.next().getValue();
             for (int i = 0; i < composantJeus.size(); i++) {
                 if (composantJeus.get(i) instanceof Ecureil) {
-                    n+=1;
+                    n += 1;
                 }
             }
 
@@ -145,14 +197,6 @@ public class Jeu {
     }
 
 
-    public void deplacerAnimaux() {
-        getAnimals().forEach(
-                (a) -> {
-                    this.setComposants((a).seDeplacer(getMatriceCarte()));
-                }
-        );
-    }
-
     /**
      * applique la mise à jour des animaux en fonction de leur etat
      */
@@ -164,5 +208,25 @@ public class Jeu {
         );
     }
 
+    public boolean remonterTemps(String sens) {
+        int toursARemonter = Personnage.getInstance().ramasserPierre(getMatriceCarte(), sens);
+        int size = Historique.getHistorique().getEtats().size();
+
+        if (toursARemonter == 2 && size > 2) {
+            composants.clear();
+            Historique.getInstance().remonter(2);
+            setComposants(Historique.getHistorique().getTopState());
+
+            return true;
+        } else if (toursARemonter == 3 && size > 3) {
+            composants.clear();
+            Historique.getInstance().remonter(3);
+            setComposants(Historique.getHistorique().getTopState());
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
 }

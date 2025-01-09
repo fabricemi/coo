@@ -8,11 +8,11 @@ public class ZForetNouvelle extends ZoneDeJeuForet {
     private int length;
     private int larger;
     private final String chaine="                                       " +
-            " H H   H  EAAAE     EE             C                                                         EE    M MM R MM        RR             " +
+            " H H   H  EAAAE     EE   L          C                               S                          EE    M MM R MM        RR             " +
             "   RR                                 " +
             "          AAEAA   CCC    AAAAB   BBB       EEE  E         GGGGG" +
             "AAAAA     HHH     R   MM    H     EE   EEE   R" +
-            "  AA   AAHRHAA  EEEEE                H                                             " +
+            "  AA   AAHRHAA  EEEEE                H  S                  L                         " +
             "     MM       AA  AAAA  AAAAAAA" +
             "BBB           BHR HBBBB  C      M  M   MMMM                E                                     " +
             "          HH           R    CCC       CCAAC";

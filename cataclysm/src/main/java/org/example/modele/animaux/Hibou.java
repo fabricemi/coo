@@ -10,12 +10,17 @@ public class Hibou extends Animaux {
     private int nbTourRestant;
     private boolean estRassasie;
     List<ComposantJeu> surLeComposant=new ArrayList<>();
-    public Hibou() {
+    public Hibou(int x, int y) {
         rep = Colors.WHITE.getCode() + "H" + Colors.RESET.getCode();
         setEtatHibou(new HibouAffame());
         nbTourRestant=1;
         estRassasie=false;
+        initPosition(x,y);
 
+    }
+
+    public boolean isEstRassasie() {
+        return estRassasie;
     }
 
     public List<ComposantJeu> getSurLeComposant() {
@@ -57,33 +62,29 @@ public class Hibou extends Animaux {
     public void setApparence() {
         if(estRassasie){
             rep= Colors.BLACK.getCode() + "H" + Colors.RESET.getCode();
+            setEtatHibou(new HibouAuRepos());
         }
         else {
             rep=Colors.WHITE.getCode() + "H" + Colors.RESET.getCode();
-        }
-
-        if(getNbTourRestant()<=0){
             setEtatHibou(new HibouAffame());
-            setNbTourRestant(1);
         }
-        System.out.println("hibou "+this.getPosition()+" "+rep);
-
         //rep=etatHibou.toString();
     }
 
     @Override
     public Map<Integer, List<ComposantJeu>> seDeplacer(Map<Integer, List<ComposantJeu>> matrice) {
-        if(estRassasie){
+      /*  if(estRassasie){
             setEtatHibou(new HibouAuRepos());
         }
         else {
             setEtatHibou(new HibouAffame());
-        }
+        }*/
+
         etatHibou.seDeplacer(matrice, this);
         return matrice;
     }
 
-    public List<Position> possibleHPositionsADeuxCases(Map<Integer, List<ComposantJeu>> matrice)
+/*    public List<Position> possibleHPositionsADeuxCases(Map<Integer, List<ComposantJeu>> matrice)
             throws IndexOutOfBoundsException, NullPointerException {
         int x = this.getPosition().getX();
         int y = this.getPosition().getY();
@@ -104,7 +105,7 @@ public class Hibou extends Animaux {
             positionList.add(new Position(x + 2, y));
         }
         return positionList;
-    }
+    }*/
 
     @Override
     public String toString() {
